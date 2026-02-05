@@ -101,3 +101,32 @@
 #====================================================================================================
 # Testing Data - Main Agent and testing sub agent both should log testing data below this section
 #====================================================================================================
+
+## user_problem_statement: "Phase 1 local-first DataWipe web app with no accounts, no server-side PII, guided broker workflows, and accurate product claims."
+## frontend:
+##   - task: "Phase 1 local-first workspace + claims update"
+##     implemented: true
+##     working: "NA"
+##     file: "frontend/src/App.js"
+##     stuck_count: 0
+##     priority: "high"
+##     needs_retesting: true
+##     status_history:
+##         -working: "NA"
+##         -agent: "main"
+##         -comment: "Removed EmailJS and beta signup, added local-only workspace (profile form, broker list, status tracking, templates, export/import), updated copy/claims, and set router basename to PUBLIC_URL." 
+## metadata:
+##   created_by: "main_agent"
+##   version: "1.0"
+##   test_sequence: 1
+##   run_ui: true
+## test_plan:
+##   current_focus:
+##     - "Phase 1 local-first workspace + claims update"
+##   stuck_tasks:
+##     - ""
+##   test_all: false
+##   test_priority: "high_first"
+## agent_communication:
+##     -agent: "main"
+##     -message: "Requesting frontend testing per user checklist: GH Pages smoke test, workspace flow, edge cases, privacy/network verification."
