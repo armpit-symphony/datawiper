@@ -1,135 +1,275 @@
 import React from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import emailjs from '@emailjs/browser';
-import { 
-  Shield, 
-  Phone, 
-  CheckCircle, 
-  Star, 
-  Users, 
-  Lock, 
-  Zap, 
+import {
+  Shield,
+  CheckCircle,
+  Lock,
   Download,
   Mail,
-  PhoneOff,
   Database,
-  Clock,
   UserCheck,
   ArrowRight
 } from 'lucide-react';
 import './App.css';
 
-const DataWipeLanding = () => {
-  const [email, setEmail] = React.useState('');
-  const [isSubmitted, setIsSubmitted] = React.useState(false);
-  const [isSubmitting, setIsSubmitting] = React.useState(false);
+const BROKERS = [
+  { id: 'acxiom', name: 'Acxiom', method: 'Web form', verification: 'Email verification often required' },
+  { id: 'spokeo', name: 'Spokeo', method: 'Web form', verification: 'Email verification often required' },
+  { id: 'whitepages', name: 'Whitepages', method: 'Web form', verification: 'Phone verification sometimes required' },
+  { id: 'beenverified', name: 'BeenVerified', method: 'Web form', verification: 'Email verification often required' },
+  { id: 'intelius', name: 'Intelius', method: 'Web form', verification: 'Email verification often required' },
+  { id: 'peoplefinders', name: 'PeopleFinders', method: 'Web form', verification: 'Email verification often required' },
+  { id: 'truthfinder', name: 'TruthFinder', method: 'Web form', verification: 'Email verification often required' },
+  { id: 'mylife', name: 'MyLife', method: 'Web form', verification: 'Email verification often required' }
+];
 
-  const handleEmailSubmit = async (e) => {
-    e.preventDefault();
-    setIsSubmitting(true);
+const STATUS_OPTIONS = [
+  { value: 'not_started', label: 'Not started' },
+  { value: 'in_progress', label: 'In progress' },
+  { value: 'submitted', label: 'Submitted' },
+  { value: 'completed', label: 'Completed' }
+];
+
+const STORAGE_KEY = 'datawipe_phase1_state';
+
+const defaultProfile = {
+  firstName: '',
+  lastName: '',
+  email: '',
+  phone: '',
+  address: '',
+  city: '',
+  stateRegion: '',
+  postalCode: '',
+  country: ''
+};
+
+const DataWipeLanding = () => {
+  const [profile, setProfile] = React.useState(defaultProfile);
+  const [selectedBrokers, setSelectedBrokers] = React.useState({});
+  const [statusByBroker, setStatusByBroker] = React.useState({});
+  const [copiedBrokerId, setCopiedBrokerId] = React.useState(null);
+  const [lastSaved, setLastSaved] = React.useState(null);
+  const importInputRef = React.useRef(null);
+
+  React.useEffect(() => {
+    if (typeof window === 'undefined') {
+      return;
+    }
+
+    const stored = window.localStorage.getItem(STORAGE_KEY);
+    if (!stored) {
+      return;
+    }
 
     try {
-      // EmailJS configuration with your credentials
-      const serviceID = 'service_a3wtsjo';
-      const templateID = 'template_cwbg69y';
-      const publicKey = 'qAvuUzURVt4x5g47y';
-
-      const templateParams = {
-        user_email: email,
-        to_email: 'dataguardpro@proton.me',
-        subject: 'New DataWipe Beta Signup',
-        message: `New beta tester signup:\n\nEmail: ${email}\nTimestamp: ${new Date().toLocaleString()}\n\nPlease send them the beta access details.`
-      };
-
-      // Send email notification
-      await emailjs.send(serviceID, templateID, templateParams, publicKey);
-      
-      setIsSubmitted(true);
-      setEmail('');
-      
-      // Force form reset by clearing the input field
-      const emailInput = document.getElementById('email');
-      if (emailInput) {
-        emailInput.value = '';
-      }
-      
-      // Reset success message after 5 seconds
-      setTimeout(() => setIsSubmitted(false), 5000);
-      
+      const parsed = JSON.parse(stored);
+      setProfile({ ...defaultProfile, ...(parsed.profile || {}) });
+      setSelectedBrokers(parsed.selectedBrokers || {});
+      setStatusByBroker(parsed.statusByBroker || {});
+      setLastSaved(parsed.updatedAt || null);
     } catch (error) {
-      console.error('Failed to send email:', error);
-      alert('Failed to submit. Please try again or email us directly at dataguardpro@proton.me');
-    } finally {
-      setIsSubmitting(false);
+      console.error('Failed to parse local workspace data.', error);
+    }
+  }, []);
+
+  React.useEffect(() => {
+    if (typeof window === 'undefined') {
+      return;
+    }
+
+    const payload = {
+      profile,
+      selectedBrokers,
+      statusByBroker,
+      updatedAt: new Date().toISOString()
+    };
+
+    window.localStorage.setItem(STORAGE_KEY, JSON.stringify(payload));
+    setLastSaved(payload.updatedAt);
+  }, [profile, selectedBrokers, statusByBroker]);
+
+  const updateProfile = (field, value) => {
+    setProfile((prev) => ({ ...prev, [field]: value }));
+  };
+
+  const toggleBroker = (brokerId) => {
+    setSelectedBrokers((prev) => ({
+      ...prev,
+      [brokerId]: !prev[brokerId]
+    }));
+
+    setStatusByBroker((prev) => ({
+      ...prev,
+      [brokerId]: prev[brokerId] || 'not_started'
+    }));
+  };
+
+  const updateStatus = (brokerId, value) => {
+    setStatusByBroker((prev) => ({ ...prev, [brokerId]: value }));
+  };
+
+  const brokerSearchUrl = (broker) =>
+    `https://duckduckgo.com/?q=${encodeURIComponent(`${broker.name} opt out`)}`;
+
+  const generateTemplate = (broker) => {
+    const fullName = `${profile.firstName} ${profile.lastName}`.trim() || '[Your Name]';
+    const email = profile.email || '[your@email.com]';
+    const phone = profile.phone || '[your phone number]';
+    const addressParts = [
+      profile.address,
+      profile.city,
+      profile.stateRegion,
+      profile.postalCode,
+      profile.country
+    ].filter(Boolean);
+    const addressLine = addressParts.length ? addressParts.join(', ') : '[your address]';
+
+    return `Subject: Data deletion request
+
+Hello ${broker.name} Privacy Team,
+
+I am requesting that you delete or suppress my personal information from your records and any public-facing products.
+
+Full name: ${fullName}
+Email: ${email}
+Phone: ${phone}
+Address: ${addressLine}
+
+Please confirm when my request has been processed.
+
+Thank you,
+${fullName}`;
+  };
+
+  const handleCopyTemplate = async (broker) => {
+    const template = generateTemplate(broker);
+
+    try {
+      await navigator.clipboard.writeText(template);
+      setCopiedBrokerId(broker.id);
+      setTimeout(() => setCopiedBrokerId(null), 2000);
+    } catch (error) {
+      console.error('Failed to copy template.', error);
+      window.alert('Copy failed. Please select and copy the text manually.');
     }
   };
 
+  const handleExport = () => {
+    const payload = {
+      profile,
+      selectedBrokers,
+      statusByBroker,
+      updatedAt: new Date().toISOString()
+    };
+
+    const blob = new Blob([JSON.stringify(payload, null, 2)], {
+      type: 'application/json'
+    });
+
+    const url = window.URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = 'datawipe-local-plan.json';
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+    window.URL.revokeObjectURL(url);
+  };
+
+  const handleImport = async (event) => {
+    const file = event.target.files?.[0];
+    if (!file) {
+      return;
+    }
+
+    try {
+      const text = await file.text();
+      const parsed = JSON.parse(text);
+      setProfile({ ...defaultProfile, ...(parsed.profile || {}) });
+      setSelectedBrokers(parsed.selectedBrokers || {});
+      setStatusByBroker(parsed.statusByBroker || {});
+      setLastSaved(parsed.updatedAt || null);
+      event.target.value = '';
+    } catch (error) {
+      console.error('Failed to import data.', error);
+      window.alert('Invalid file. Please choose a valid DataWipe export.');
+    }
+  };
+
+  const handleClear = () => {
+    setProfile(defaultProfile);
+    setSelectedBrokers({});
+    setStatusByBroker({});
+    setCopiedBrokerId(null);
+    setLastSaved(null);
+    if (typeof window !== 'undefined') {
+      window.localStorage.removeItem(STORAGE_KEY);
+    }
+  };
+
+  const activeBrokers = BROKERS.filter((broker) => selectedBrokers[broker.id]);
+
   const features = [
     {
-      icon: <PhoneOff className="w-8 h-8" />,
-      title: "Stop Spam Calls",
-      description: "Eliminate unwanted solicitation calls by removing your data from the source"
+      icon: <Lock className="w-8 h-8" />,
+      title: 'Local-only workspace',
+      description: 'Your info stays in your browser (state + localStorage). No accounts required.'
     },
     {
       icon: <Database className="w-8 h-8" />,
-      title: "8 Data Brokers Covered",
-      description: "Comprehensive coverage across major data broker networks"
+      title: 'Guided broker list',
+      description: 'Pick common brokers and open their opt-out flows in a new tab.'
     },
     {
-      icon: <Zap className="w-8 h-8" />,
-      title: "6 Fully Automated",
-      description: "Most removals happen automatically with zero effort from you"
-    },
-    {
-      icon: <Lock className="w-8 h-8" />,
-      title: "100% Local Processing",
-      description: "Your personal data never leaves your device - complete privacy guaranteed"
-    },
-    {
-      icon: <Clock className="w-8 h-8" />,
-      title: "Real-Time Updates",
-      description: "Track removal progress with live status updates"
+      icon: <Mail className="w-8 h-8" />,
+      title: 'Prefilled request templates',
+      description: 'Copy ready-to-send templates with your details and submit on the broker site.'
     },
     {
       icon: <UserCheck className="w-8 h-8" />,
-      title: "2-Week License",
-      description: "Full beta access to test all features risk-free"
+      title: 'User-initiated submissions',
+      description: 'No silent automation. Every request is triggered by you.'
+    },
+    {
+      icon: <CheckCircle className="w-8 h-8" />,
+      title: 'Progress tracking',
+      description: 'Track each broker from not started to completed, all stored locally.'
+    },
+    {
+      icon: <Download className="w-8 h-8" />,
+      title: 'Export & import',
+      description: 'Back up your plan to a JSON file or import it on another device.'
     }
   ];
 
   const stats = [
-    { number: "8", label: "Data Brokers" },
-    { number: "6", label: "Automated" },
-    { number: "100%", label: "Local Processing" },
-    { number: "2", label: "Week License" }
+    { number: '0', label: 'Accounts Required' },
+    { number: '100%', label: 'Local Storage' },
+    { number: `${BROKERS.length}`, label: 'Guided Brokers' },
+    { number: 'User-led', label: 'Requests' }
   ];
 
-  const testimonials = [
+  const transparency = [
     {
-      name: "Sarah Johnson",
-      role: "Privacy Advocate",
-      content: "Finally, a solution that actually works. My spam calls dropped by 90% after using DataWipe.",
-      rating: 5
+      title: 'No server storage',
+      description: 'Phase 1 keeps everything in your browser. Data leaves only when you click a broker link.'
     },
     {
-      name: "Mike Chen",
-      role: "Business Owner", 
-      content: "The automation is incredible. Set it and forget it - DataWipe handles everything locally and securely.",
-      rating: 5
+      title: 'No background scraping',
+      description: 'We do not crawl or submit behind the scenes. You remain in control.'
     },
     {
-      name: "Lisa Rodriguez",
-      role: "Remote Worker",
-      content: "I love that my data stays on my device. True privacy while eliminating those annoying calls.",
-      rating: 5
+      title: 'Clear & export anytime',
+      description: 'Delete local data instantly or export it for your own records.'
     }
   ];
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-secondary-950 via-secondary-900 to-primary-950">
       {/* Navigation */}
-      <motion.nav 
+      <motion.nav
         initial={{ y: -100, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.8 }}
@@ -144,7 +284,7 @@ const DataWipeLanding = () => {
             <div className="hidden md:flex items-center space-x-8">
               <a href="#features" className="text-secondary-300 hover:text-primary-400 transition-colors">Features</a>
               <a href="#how-it-works" className="text-secondary-300 hover:text-primary-400 transition-colors">How It Works</a>
-              <a href="#beta" className="btn-primary">Join Beta</a>
+              <a href="#workspace" className="btn-primary">Build My Plan</a>
             </div>
           </div>
         </div>
@@ -153,48 +293,48 @@ const DataWipeLanding = () => {
       {/* Hero Section */}
       <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
         <div className="absolute inset-0 z-0">
-          <img 
-            src="https://images.unsplash.com/photo-1488590528505-98d2b5aba04b" 
+          <img
+            src="https://images.unsplash.com/photo-1488590528505-98d2b5aba04b"
             alt="Digital Security"
             className="w-full h-full object-cover opacity-20"
           />
           <div className="absolute inset-0 bg-gradient-to-br from-secondary-950/90 to-primary-950/90"></div>
         </div>
-        
+
         <div className="container-custom relative z-10 section-padding">
           <div className="max-w-4xl mx-auto text-center">
-            <motion.h1 
+            <motion.h1
               initial={{ y: 50, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
               transition={{ duration: 0.8, delay: 0.2 }}
               className="text-5xl md:text-7xl font-bold mb-6 text-shadow-lg"
             >
-              Stop <span className="gradient-text">Spam Calls</span>
+              Opt out of <span className="gradient-text">data brokers</span> locally
             </motion.h1>
-            
-            <motion.p 
+
+            <motion.p
               initial={{ y: 50, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
               transition={{ duration: 0.8, delay: 0.4 }}
               className="text-xl md:text-2xl text-secondary-300 mb-8 max-w-3xl mx-auto"
             >
-              DataWipe automatically removes your personal information from 8 major data brokers, 
-              eliminating the source of unwanted solicitation calls. Your data stays 100% local.
+              Build a guided removal plan in your browser. No accounts. No server-side storage. Every request is
+              user-initiated and transparent.
             </motion.p>
-            
-            <motion.div 
+
+            <motion.div
               initial={{ y: 50, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
               transition={{ duration: 0.8, delay: 0.6 }}
               className="flex justify-center"
             >
-              <button className="btn-primary text-lg">
-                Join Beta Testing <ArrowRight className="w-5 h-5 ml-2" />
-              </button>
+              <a href="#workspace" className="btn-primary text-lg">
+                Build My Removal Plan <ArrowRight className="w-5 h-5 ml-2" />
+              </a>
             </motion.div>
 
             {/* Stats */}
-            <motion.div 
+            <motion.div
               initial={{ y: 50, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
               transition={{ duration: 0.8, delay: 0.8 }}
@@ -216,15 +356,15 @@ const DataWipeLanding = () => {
       {/* Features Section */}
       <section id="features" className="relative">
         <div className="absolute inset-0 z-0">
-          <img 
-            src="https://images.pexels.com/photos/8728559/pexels-photo-8728559.jpeg" 
-            alt="Phone Protection"
+          <img
+            src="https://images.pexels.com/photos/8728559/pexels-photo-8728559.jpeg"
+            alt="Privacy Protection"
             className="w-full h-full object-cover opacity-10"
           />
         </div>
-        
+
         <div className="container-custom section-padding relative z-10">
-          <motion.div 
+          <motion.div
             initial={{ y: 50, opacity: 0 }}
             whileInView={{ y: 0, opacity: 1 }}
             transition={{ duration: 0.8 }}
@@ -232,10 +372,10 @@ const DataWipeLanding = () => {
             className="text-center mb-16"
           >
             <h2 className="text-4xl md:text-6xl font-bold mb-6 gradient-text">
-              Powerful Features
+              Phase 1: Local, guided opt-outs
             </h2>
             <p className="text-xl text-secondary-300 max-w-3xl mx-auto">
-              Advanced automation meets complete privacy protection
+              Everything you need to run broker removals yourself, with full transparency.
             </p>
           </motion.div>
 
@@ -267,15 +407,15 @@ const DataWipeLanding = () => {
       {/* How It Works */}
       <section id="how-it-works" className="relative">
         <div className="absolute inset-0 z-0">
-          <img 
-            src="https://images.unsplash.com/photo-1639815188546-c43c240ff4df" 
+          <img
+            src="https://images.unsplash.com/photo-1639815188546-c43c240ff4df"
             alt="Data Security"
             className="w-full h-full object-cover opacity-10"
           />
         </div>
-        
+
         <div className="container-custom section-padding relative z-10">
-          <motion.div 
+          <motion.div
             initial={{ y: 50, opacity: 0 }}
             whileInView={{ y: 0, opacity: 1 }}
             transition={{ duration: 0.8 }}
@@ -283,29 +423,29 @@ const DataWipeLanding = () => {
             className="text-center mb-16"
           >
             <h2 className="text-4xl md:text-6xl font-bold mb-6 gradient-text">
-              How It Works
+              How it works
             </h2>
             <p className="text-xl text-secondary-300 max-w-3xl mx-auto">
-              Simple, secure, and completely automated
+              Simple, privacy-first steps you control.
             </p>
           </motion.div>
 
           <div className="grid md:grid-cols-3 gap-8">
             {[
               {
-                step: "01",
-                title: "Download & Install",
-                description: "Download DataWipe to your device. Everything runs locally for complete privacy."
+                step: '01',
+                title: 'Enter info locally',
+                description: 'Fill out your details. Everything stays in your browser.'
               },
               {
-                step: "02", 
-                title: "Automated Removal",
-                description: "DataWipe automatically contacts 6 major data brokers and removes your information."
+                step: '02',
+                title: 'Open broker opt-outs',
+                description: 'Select brokers and open their opt-out pages in a new tab.'
               },
               {
-                step: "03",
-                title: "Manual Guidance",
-                description: "For 2 brokers requiring manual removal, get step-by-step guidance through the process."
+                step: '03',
+                title: 'Track progress',
+                description: 'Update status and export your plan whenever you want.'
               }
             ].map((step, index) => (
               <motion.div
@@ -331,18 +471,291 @@ const DataWipeLanding = () => {
         </div>
       </section>
 
-      {/* Testimonials */}
-      <section className="relative">
+      {/* Workspace */}
+      <section id="workspace" className="relative">
         <div className="absolute inset-0 z-0">
-          <img 
-            src="https://images.pexels.com/photos/8728290/pexels-photo-8728290.jpeg" 
-            alt="User Testimonial"
+          <img
+            src="https://images.unsplash.com/photo-1510849911856-cdc9335e5597"
+            alt="Local Workspace"
             className="w-full h-full object-cover opacity-10"
           />
         </div>
-        
+
         <div className="container-custom section-padding relative z-10">
-          <motion.div 
+          <motion.div
+            initial={{ y: 50, opacity: 0 }}
+            whileInView={{ y: 0, opacity: 1 }}
+            transition={{ duration: 0.8 }}
+            viewport={{ once: true }}
+            className="max-w-4xl mx-auto text-center mb-16"
+          >
+            <h2 className="text-4xl md:text-6xl font-bold mb-6 gradient-text">
+              Your local removal workspace
+            </h2>
+            <p className="text-xl text-secondary-300">
+              Everything below runs in your browser. Nothing is sent until you open a broker link.
+            </p>
+          </motion.div>
+
+          <div className="grid lg:grid-cols-2 gap-8">
+            <div className="glass-morphism rounded-2xl p-8">
+              <div className="flex items-center gap-3 mb-4">
+                <UserCheck className="w-6 h-6 text-primary-400" />
+                <h3 className="text-2xl font-semibold text-white">1. Your info (stored locally)</h3>
+              </div>
+              <p className="text-secondary-400 mb-6">
+                We never send this anywhere. It lives in your browser until you export or clear it.
+              </p>
+
+              <div className="grid md:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-medium text-secondary-300 mb-2">First name</label>
+                  <input
+                    type="text"
+                    value={profile.firstName}
+                    onChange={(e) => updateProfile('firstName', e.target.value)}
+                    className="w-full px-4 py-3 bg-secondary-800/50 border border-secondary-600 rounded-xl text-white placeholder-secondary-400 focus:outline-none focus:ring-2 focus:ring-primary-500"
+                    placeholder="Jane"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-secondary-300 mb-2">Last name</label>
+                  <input
+                    type="text"
+                    value={profile.lastName}
+                    onChange={(e) => updateProfile('lastName', e.target.value)}
+                    className="w-full px-4 py-3 bg-secondary-800/50 border border-secondary-600 rounded-xl text-white placeholder-secondary-400 focus:outline-none focus:ring-2 focus:ring-primary-500"
+                    placeholder="Doe"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-secondary-300 mb-2">Email</label>
+                  <input
+                    type="email"
+                    value={profile.email}
+                    onChange={(e) => updateProfile('email', e.target.value)}
+                    className="w-full px-4 py-3 bg-secondary-800/50 border border-secondary-600 rounded-xl text-white placeholder-secondary-400 focus:outline-none focus:ring-2 focus:ring-primary-500"
+                    placeholder="jane@email.com"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-secondary-300 mb-2">Phone</label>
+                  <input
+                    type="tel"
+                    value={profile.phone}
+                    onChange={(e) => updateProfile('phone', e.target.value)}
+                    className="w-full px-4 py-3 bg-secondary-800/50 border border-secondary-600 rounded-xl text-white placeholder-secondary-400 focus:outline-none focus:ring-2 focus:ring-primary-500"
+                    placeholder="(555) 555-5555"
+                  />
+                </div>
+                <div className="md:col-span-2">
+                  <label className="block text-sm font-medium text-secondary-300 mb-2">Street address</label>
+                  <input
+                    type="text"
+                    value={profile.address}
+                    onChange={(e) => updateProfile('address', e.target.value)}
+                    className="w-full px-4 py-3 bg-secondary-800/50 border border-secondary-600 rounded-xl text-white placeholder-secondary-400 focus:outline-none focus:ring-2 focus:ring-primary-500"
+                    placeholder="123 Main St"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-secondary-300 mb-2">City</label>
+                  <input
+                    type="text"
+                    value={profile.city}
+                    onChange={(e) => updateProfile('city', e.target.value)}
+                    className="w-full px-4 py-3 bg-secondary-800/50 border border-secondary-600 rounded-xl text-white placeholder-secondary-400 focus:outline-none focus:ring-2 focus:ring-primary-500"
+                    placeholder="San Francisco"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-secondary-300 mb-2">State / Region</label>
+                  <input
+                    type="text"
+                    value={profile.stateRegion}
+                    onChange={(e) => updateProfile('stateRegion', e.target.value)}
+                    className="w-full px-4 py-3 bg-secondary-800/50 border border-secondary-600 rounded-xl text-white placeholder-secondary-400 focus:outline-none focus:ring-2 focus:ring-primary-500"
+                    placeholder="CA"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-secondary-300 mb-2">Postal code</label>
+                  <input
+                    type="text"
+                    value={profile.postalCode}
+                    onChange={(e) => updateProfile('postalCode', e.target.value)}
+                    className="w-full px-4 py-3 bg-secondary-800/50 border border-secondary-600 rounded-xl text-white placeholder-secondary-400 focus:outline-none focus:ring-2 focus:ring-primary-500"
+                    placeholder="94107"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-secondary-300 mb-2">Country</label>
+                  <input
+                    type="text"
+                    value={profile.country}
+                    onChange={(e) => updateProfile('country', e.target.value)}
+                    className="w-full px-4 py-3 bg-secondary-800/50 border border-secondary-600 rounded-xl text-white placeholder-secondary-400 focus:outline-none focus:ring-2 focus:ring-primary-500"
+                    placeholder="United States"
+                  />
+                </div>
+              </div>
+
+              <div className="mt-6 flex flex-wrap gap-3">
+                <button
+                  type="button"
+                  onClick={handleExport}
+                  className="flex items-center gap-2 px-4 py-2 rounded-xl border border-primary-500 text-primary-300 hover:bg-primary-500 hover:text-white transition-all"
+                >
+                  <Download className="w-4 h-4" />
+                  Export JSON
+                </button>
+                <button
+                  type="button"
+                  onClick={() => importInputRef.current?.click()}
+                  className="flex items-center gap-2 px-4 py-2 rounded-xl border border-primary-500 text-primary-300 hover:bg-primary-500 hover:text-white transition-all"
+                >
+                  <Download className="w-4 h-4 rotate-180" />
+                  Import JSON
+                </button>
+                <button
+                  type="button"
+                  onClick={handleClear}
+                  className="flex items-center gap-2 px-4 py-2 rounded-xl border border-secondary-500 text-secondary-300 hover:bg-secondary-700 hover:text-white transition-all"
+                >
+                  Clear local data
+                </button>
+                <input
+                  ref={importInputRef}
+                  type="file"
+                  accept="application/json"
+                  onChange={handleImport}
+                  className="hidden"
+                />
+              </div>
+
+              <p className="text-xs text-secondary-500 mt-4">
+                {lastSaved ? `Last saved: ${new Date(lastSaved).toLocaleString()}` : 'Local data not saved yet.'}
+              </p>
+            </div>
+
+            <div className="glass-morphism rounded-2xl p-8">
+              <div className="flex items-center gap-3 mb-4">
+                <Database className="w-6 h-6 text-primary-400" />
+                <h3 className="text-2xl font-semibold text-white">2. Select brokers</h3>
+              </div>
+              <p className="text-secondary-400 mb-6">
+                Choose the brokers you want to opt out from. We open a search tab so you can pick the official opt-out
+                page.
+              </p>
+              <div className="space-y-4 max-h-[520px] overflow-y-auto pr-2">
+                {BROKERS.map((broker) => {
+                  const isSelected = !!selectedBrokers[broker.id];
+
+                  return (
+                    <div key={broker.id} className="border border-secondary-700/60 rounded-2xl p-4">
+                      <div className="flex items-start justify-between gap-4">
+                        <label className="flex items-start gap-3 cursor-pointer">
+                          <input
+                            type="checkbox"
+                            checked={isSelected}
+                            onChange={() => toggleBroker(broker.id)}
+                            className="mt-1 h-4 w-4 rounded border-secondary-500 text-primary-500 focus:ring-primary-500"
+                          />
+                          <span>
+                            <span className="block font-semibold text-white">{broker.name}</span>
+                            <span className="block text-xs text-secondary-500">
+                              {broker.method} · {broker.verification}
+                            </span>
+                          </span>
+                        </label>
+                        <a
+                          href={brokerSearchUrl(broker)}
+                          target="_blank"
+                          rel="noreferrer"
+                          className="text-xs md:text-sm px-3 py-2 rounded-xl border border-primary-500 text-primary-300 hover:bg-primary-500 hover:text-white transition-all"
+                        >
+                          Find opt-out
+                        </a>
+                      </div>
+                      <div className="mt-3 flex items-center gap-3">
+                        <span className="text-xs uppercase tracking-wide text-secondary-500">Status</span>
+                        <select
+                          value={statusByBroker[broker.id] || 'not_started'}
+                          onChange={(e) => updateStatus(broker.id, e.target.value)}
+                          disabled={!isSelected}
+                          className={`bg-secondary-800/50 border border-secondary-600 rounded-xl px-3 py-2 text-sm text-white ${
+                            isSelected ? 'focus:ring-primary-500 focus:border-primary-500' : 'opacity-50 cursor-not-allowed'
+                          }`}
+                        >
+                          {STATUS_OPTIONS.map((option) => (
+                            <option key={option.value} value={option.value}>
+                              {option.label}
+                            </option>
+                          ))}
+                        </select>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          </div>
+
+          <div className="glass-morphism rounded-2xl p-8 mt-10">
+            <div className="flex flex-wrap items-center justify-between gap-4 mb-4">
+              <div>
+                <h3 className="text-2xl font-semibold text-white">3. Request templates</h3>
+                <p className="text-secondary-400 text-sm">
+                  Copy a template and paste it into the broker opt-out flow.
+                </p>
+              </div>
+            </div>
+
+            {activeBrokers.length === 0 ? (
+              <p className="text-secondary-400">Select brokers above to generate templates.</p>
+            ) : (
+              <div className="space-y-6">
+                {activeBrokers.map((broker) => (
+                  <div key={broker.id} className="border border-secondary-700/60 rounded-2xl p-6">
+                    <div className="flex flex-wrap items-center justify-between gap-4 mb-4">
+                      <div>
+                        <h4 className="text-lg font-semibold text-white">{broker.name}</h4>
+                        <p className="text-xs text-secondary-500">
+                          Use on the broker opt-out page or via their preferred contact channel.
+                        </p>
+                      </div>
+                      <button
+                        type="button"
+                        onClick={() => handleCopyTemplate(broker)}
+                        className="text-sm px-4 py-2 rounded-xl bg-primary-500/20 text-primary-200 hover:bg-primary-500 hover:text-white transition-all flex items-center gap-2"
+                      >
+                        <Mail className="w-4 h-4" />
+                        {copiedBrokerId === broker.id ? 'Copied' : 'Copy template'}
+                      </button>
+                    </div>
+                    <pre className="whitespace-pre-wrap text-sm text-secondary-200 bg-secondary-900/60 border border-secondary-700/60 rounded-xl p-4 max-h-60 overflow-y-auto">
+                      {generateTemplate(broker)}
+                    </pre>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        </div>
+      </section>
+
+      {/* Transparency */}
+      <section id="transparency" className="relative">
+        <div className="absolute inset-0 z-0">
+          <img
+            src="https://images.pexels.com/photos/8728290/pexels-photo-8728290.jpeg"
+            alt="Privacy Principles"
+            className="w-full h-full object-cover opacity-10"
+          />
+        </div>
+
+        <div className="container-custom section-padding relative z-10">
+          <motion.div
             initial={{ y: 50, opacity: 0 }}
             whileInView={{ y: 0, opacity: 1 }}
             transition={{ duration: 0.8 }}
@@ -350,15 +763,15 @@ const DataWipeLanding = () => {
             className="text-center mb-16"
           >
             <h2 className="text-4xl md:text-6xl font-bold mb-6 gradient-text">
-              What Users Say
+              Privacy & transparency
             </h2>
             <p className="text-xl text-secondary-300 max-w-3xl mx-auto">
-              Real feedback from beta testers
+              Phase 1 is intentionally minimal to keep compliance scope low.
             </p>
           </motion.div>
 
           <div className="grid md:grid-cols-3 gap-8">
-            {testimonials.map((testimonial, index) => (
+            {transparency.map((item, index) => (
               <motion.div
                 key={index}
                 initial={{ y: 50, opacity: 0 }}
@@ -367,117 +780,11 @@ const DataWipeLanding = () => {
                 viewport={{ once: true }}
                 className="glass-morphism rounded-2xl p-8 card-hover"
               >
-                <div className="flex mb-4">
-                  {[...Array(testimonial.rating)].map((_, i) => (
-                    <Star key={i} className="w-5 h-5 text-yellow-400 fill-current" />
-                  ))}
-                </div>
-                <p className="text-secondary-300 mb-6 italic">
-                  "{testimonial.content}"
-                </p>
-                <div>
-                  <div className="font-semibold text-white">{testimonial.name}</div>
-                  <div className="text-sm text-secondary-400">{testimonial.role}</div>
-                </div>
+                <h3 className="text-xl font-semibold mb-3 text-white">{item.title}</h3>
+                <p className="text-secondary-400">{item.description}</p>
               </motion.div>
             ))}
           </div>
-        </div>
-      </section>
-
-      {/* Beta Signup CTA */}
-      <section id="beta" className="relative">
-        <div className="absolute inset-0 z-0">
-          <img 
-            src="https://images.unsplash.com/photo-1510849911856-cdc9335e5597" 
-            alt="Security Protection"
-            className="w-full h-full object-cover opacity-10"
-          />
-        </div>
-        
-        <div className="container-custom section-padding relative z-10">
-          <motion.div 
-            initial={{ y: 50, opacity: 0 }}
-            whileInView={{ y: 0, opacity: 1 }}
-            transition={{ duration: 0.8 }}
-            viewport={{ once: true }}
-            className="max-w-4xl mx-auto text-center"
-          >
-            <h2 className="text-4xl md:text-6xl font-bold mb-6 gradient-text">
-              Join the Beta
-            </h2>
-            <p className="text-xl text-secondary-300 mb-8 max-w-3xl mx-auto">
-              Get early access to DataWipe and help shape the future of privacy protection. 
-              Beta testers receive a free 2-week license and priority support.
-            </p>
-
-            <div className="glass-morphism rounded-2xl p-8 max-w-md mx-auto">
-              {isSubmitted ? (
-                <motion.div
-                  initial={{ scale: 0.8, opacity: 0 }}
-                  animate={{ scale: 1, opacity: 1 }}
-                  className="text-center"
-                >
-                  <CheckCircle className="w-12 h-12 text-green-400 mx-auto mb-4" />
-                  <h3 className="text-xl font-semibold text-white mb-2">Thank You!</h3>
-                  <p className="text-secondary-300">We'll send you beta access details soon.</p>
-                </motion.div>
-              ) : (
-                <form onSubmit={handleEmailSubmit} className="space-y-6">
-                  <div>
-                    <label htmlFor="email" className="block text-sm font-medium text-secondary-300 mb-2">
-                      Email Address
-                    </label>
-                    <input
-                      type="email"
-                      id="email"
-                      value={email}
-                      onChange={(e) => setEmail(e.target.value)}
-                      required
-                      disabled={isSubmitting}
-                      className="w-full px-4 py-3 bg-secondary-800/50 border border-secondary-600 rounded-xl text-white placeholder-secondary-400 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent disabled:opacity-50"
-                      placeholder="Enter your email for beta access"
-                    />
-                  </div>
-                  <button 
-                    type="submit" 
-                    disabled={isSubmitting}
-                    className="btn-primary w-full disabled:opacity-50 disabled:cursor-not-allowed"
-                  >
-                    {isSubmitting ? (
-                      <>
-                        <div className="w-5 h-5 mr-2 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-                        Submitting...
-                      </>
-                    ) : (
-                      <>
-                        <Mail className="w-5 h-5 mr-2" />
-                        Join Beta Testing
-                      </>
-                    )}
-                  </button>
-                </form>
-              )}
-            </div>
-
-            <div className="mt-8 text-sm text-secondary-400">
-              <p>Beta includes:</p>
-              <div className="flex flex-wrap justify-center gap-6 mt-4">
-                <span className="flex items-center">
-                  <CheckCircle className="w-4 h-4 text-green-400 mr-2" />
-                  2-Week Free License
-                </span>
-                <span className="flex items-center">
-                  <CheckCircle className="w-4 h-4 text-green-400 mr-2" />
-                  Priority Support
-                </span>
-                <span className="flex items-center">
-                  <CheckCircle className="w-4 h-4 text-green-400 mr-2" />
-                  Early Feature Access
-                </span>
-              </div>
-            </div>
-          </motion.div>
         </div>
       </section>
 
@@ -491,32 +798,28 @@ const DataWipeLanding = () => {
                 <span className="text-2xl font-bold gradient-text">DataWipe</span>
               </div>
               <p className="text-secondary-400 max-w-md">
-                Stop spam calls by removing your data from brokers. 
-                100% local processing for complete privacy.
+                Local-first broker opt-out guidance. No accounts. No server-side storage. You control every request.
               </p>
             </div>
-            
+
             <div>
               <h4 className="font-semibold text-white mb-4">Product</h4>
               <ul className="space-y-2 text-secondary-400">
                 <li><a href="#features" className="hover:text-primary-400 transition-colors">Features</a></li>
                 <li><a href="#how-it-works" className="hover:text-primary-400 transition-colors">How It Works</a></li>
-                <li><a href="#beta" className="hover:text-primary-400 transition-colors">Beta Testing</a></li>
+                <li><a href="#workspace" className="hover:text-primary-400 transition-colors">Workspace</a></li>
               </ul>
             </div>
-            
+
             <div>
-              <h4 className="font-semibold text-white mb-4">Contact</h4>
+              <h4 className="font-semibold text-white mb-4">Transparency</h4>
               <ul className="space-y-2 text-secondary-400">
-                <li>
-                  <a href="mailto:dataguardpro@proton.me" className="hover:text-primary-400 transition-colors">
-                    dataguardpro@proton.me
-                  </a>
-                </li>
+                <li><a href="#transparency" className="hover:text-primary-400 transition-colors">Privacy</a></li>
+                <li><span className="text-secondary-500">No data collection in Phase 1</span></li>
               </ul>
             </div>
           </div>
-          
+
           <div className="border-t border-secondary-800 mt-8 pt-8 text-center text-secondary-400">
             <p>&copy; 2025 DataWipe. All rights reserved.</p>
           </div>
@@ -529,7 +832,7 @@ const DataWipeLanding = () => {
 function App() {
   return (
     <div className="App">
-      <BrowserRouter basename="/datawipe">
+      <BrowserRouter basename={process.env.PUBLIC_URL || '/'}>
         <Routes>
           <Route path="/" element={<DataWipeLanding />} />
         </Routes>
