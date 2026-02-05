@@ -103,6 +103,18 @@
 #====================================================================================================
 
 ## user_problem_statement: "Phase 1 local-first DataWipe web app with no accounts, no server-side PII, guided broker workflows, and accurate product claims."
+## backend:
+##   - task: "Backend smoke test (no changes)"
+##     implemented: false
+##     working: "NA"
+##     file: "backend/server.py"
+##     stuck_count: 0
+##     priority: "low"
+##     needs_retesting: true
+##     status_history:
+##         -working: "NA"
+##         -agent: "main"
+##         -comment: "No backend changes; running required smoke test per protocol before frontend testing."
 ## frontend:
 ##   - task: "Phase 1 local-first workspace + claims update"
 ##     implemented: true
