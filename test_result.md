@@ -132,7 +132,10 @@
 ##         -comment: "Removed EmailJS and beta signup, added local-only workspace (profile form, broker list, status tracking, templates, export/import), updated copy/claims, and set router basename to PUBLIC_URL."
 ##         -working: false
 ##         -agent: "testing"
-##         -comment: "CRITICAL DEPLOYMENT ISSUE: GitHub Pages site returns 404 'Site not found' at https://Armpit-symphony.github.io/datawipe. Tested multiple URL variations - all return 404. Cannot test application functionality until GitHub Pages deployment is fixed. Likely causes: Pages not enabled, wrong publishing source, private repo, or missing index.html in root." 
+##         -comment: "CRITICAL DEPLOYMENT ISSUE: GitHub Pages site returns 404 'Site not found' at https://Armpit-symphony.github.io/datawipe. Tested multiple URL variations - all return 404. Cannot test application functionality until GitHub Pages deployment is fixed. Likely causes: Pages not enabled, wrong publishing source, private repo, or missing index.html in root."
+##         -working: false
+##         -agent: "testing"
+##         -comment: "Frontend testing blocked: GitHub Pages URL https://Armpit-symphony.github.io/datawipe returned 404 (Site not found). Unable to execute UI tests until deployment is fixed." 
 ## metadata:
 ##   created_by: "main_agent"
 ##   version: "1.0"
