@@ -14,14 +14,94 @@ import {
 import './App.css';
 
 const BROKERS = [
-  { id: 'acxiom', name: 'Acxiom', method: 'Web form', verification: 'Email verification often required' },
-  { id: 'spokeo', name: 'Spokeo', method: 'Web form', verification: 'Email verification often required' },
-  { id: 'whitepages', name: 'Whitepages', method: 'Web form', verification: 'Phone verification sometimes required' },
-  { id: 'beenverified', name: 'BeenVerified', method: 'Web form', verification: 'Email verification often required' },
-  { id: 'intelius', name: 'Intelius', method: 'Web form', verification: 'Email verification often required' },
-  { id: 'peoplefinders', name: 'PeopleFinders', method: 'Web form', verification: 'Email verification often required' },
-  { id: 'truthfinder', name: 'TruthFinder', method: 'Web form', verification: 'Email verification often required' },
-  { id: 'mylife', name: 'MyLife', method: 'Web form', verification: 'Email verification often required' }
+  {
+    id: 'acxiom',
+    name: 'Acxiom',
+    url: 'https://isapps.acxiom.com/optout/optout.aspx',
+    method: 'Consumer opt-out form',
+    requirement: 'Scroll to “Consumer Opt Out Form”',
+    instructions: 'Submit the consumer opt-out form to request suppression.'
+  },
+  {
+    id: 'spokeo',
+    name: 'Spokeo',
+    url: 'https://www.spokeo.com/optout',
+    method: 'Opt-out search',
+    requirement: 'Paste your profile URL',
+    instructions: 'Find your listing and submit the opt-out request.'
+  },
+  {
+    id: 'whitepages',
+    name: 'Whitepages',
+    url: 'https://www.whitepages.com/suppression-requests',
+    method: 'Suppression request',
+    requirement: 'Paste your profile URL',
+    instructions: 'Enter your Whitepages profile URL and follow verification steps.'
+  },
+  {
+    id: 'beenverified',
+    name: 'BeenVerified',
+    url: 'https://www.beenverified.com/app/optout/search',
+    method: 'Opt-out search',
+    requirement: 'Search for your listing',
+    instructions: 'Locate your record and complete the opt-out request.'
+  },
+  {
+    id: 'intelius',
+    name: 'Intelius (PeopleConnect)',
+    url: 'https://suppression.peopleconnect.us',
+    method: 'Suppression center',
+    requirement: 'Email verification required',
+    instructions: 'Use the PeopleConnect suppression tool to suppress Intelius data.'
+  },
+  {
+    id: 'peoplefinders',
+    name: 'PeopleFinders',
+    url: 'https://www.peoplefinders.com/opt-out',
+    method: 'Opt-out form',
+    requirement: 'Email verification often required',
+    instructions: 'Submit the opt-out form to remove your listing.'
+  },
+  {
+    id: 'truthfinder',
+    name: 'TruthFinder',
+    url: 'https://suppression.peopleconnect.us',
+    method: 'Suppression center',
+    requirement: 'Email verification required',
+    instructions: 'Use the PeopleConnect suppression tool to suppress TruthFinder data.'
+  },
+  {
+    id: 'mylife',
+    name: 'MyLife',
+    url: 'https://www.mylife.com/ccpa/index.pubview',
+    method: 'CCPA opt-out form',
+    requirement: 'Provide personal details',
+    instructions: 'Complete the CCPA opt-out request and submit.'
+  },
+  {
+    id: 'lexisnexis',
+    name: 'LexisNexis',
+    url: 'https://optout.lexisnexis.com',
+    method: 'Suppression request',
+    requirement: 'Processing may take up to 30 days',
+    instructions: 'Submit the opt-out form; allow up to 30 days for processing.'
+  },
+  {
+    id: 'radaris',
+    name: 'Radaris',
+    url: 'https://radaris.com',
+    method: 'Profile removal',
+    requirement: 'Find your profile first',
+    instructions: 'Search for your profile and click “Remove my information” on the listing.'
+  },
+  {
+    id: 'zoominfo',
+    name: 'ZoomInfo',
+    url: 'https://privacy.zoominfo.com',
+    method: 'Privacy Center opt-out',
+    requirement: 'Submit opt-out request',
+    instructions: 'Use the Privacy Center to opt out of data sharing.'
+  }
 ];
 
 const STATUS_OPTIONS = [
