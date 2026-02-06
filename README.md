@@ -37,6 +37,7 @@ Checklist:
 - Data is stored in the browser’s localStorage only.
 - Users can export or clear data at any time from the workspace.
 - Requests are always user-initiated and visible.
+- In-app privacy policy is available at `/privacy` (e.g., https://armpit-symphony.github.io/datawiper/privacy).
 
 ## Roadmap
 Phase 2 will introduce optional accounts, server-side storage, verification handling, and compliance workflows when the product is ready to handle PII.
