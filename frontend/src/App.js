@@ -947,6 +947,7 @@ ${fullName}`;
                       <button
                         type="button"
                         onClick={() => handleCopyTemplate(broker)}
+                        aria-label={`Copy ${broker.name} template`}
                         className="text-sm px-4 py-2 rounded-xl bg-primary-500/20 text-primary-200 hover:bg-primary-500 hover:text-white transition-all flex items-center gap-2"
                       >
                         <Mail className="w-4 h-4" />
