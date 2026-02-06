@@ -130,8 +130,10 @@ const DataWipeLanding = () => {
   const [profile, setProfile] = React.useState(defaultProfile);
   const [selectedBrokers, setSelectedBrokers] = React.useState({});
   const [statusByBroker, setStatusByBroker] = React.useState({});
+  const [statusTimestamps, setStatusTimestamps] = React.useState({});
   const [copiedBrokerId, setCopiedBrokerId] = React.useState(null);
   const [lastSaved, setLastSaved] = React.useState(null);
+  const [toast, setToast] = React.useState(null);
   const importInputRef = React.useRef(null);
 
   React.useEffect(() => {
