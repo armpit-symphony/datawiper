@@ -190,8 +190,6 @@ const DataWipeLanding = () => {
     setStatusByBroker((prev) => ({ ...prev, [brokerId]: value }));
   };
 
-  const brokerSearchUrl = (broker) =>
-    `https://duckduckgo.com/?q=${encodeURIComponent(`${broker.name} opt out`)}`;
 
   const generateTemplate = (broker) => {
     const fullName = `${profile.firstName} ${profile.lastName}`.trim() || '[Your Name]';
