@@ -1,0 +1,13 @@
+{
+  "files": {
+    "main.css": "/datawipe/static/css/main.71d81405.css",
+    "main.js": "/datawipe/static/js/main.42d46e48.js",
+    "index.html": "/datawipe/index.html",
+    "main.71d81405.css.map": "/datawipe/static/css/main.71d81405.css.map",
+    "main.42d46e48.js.map": "/datawipe/static/js/main.42d46e48.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.71d81405.css",
+    "static/js/main.42d46e48.js"
+  ]
+}
