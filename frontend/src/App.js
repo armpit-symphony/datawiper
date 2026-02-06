@@ -263,17 +263,27 @@ END:VCALENDAR`;
 
 
   const generateTemplate = (broker) => {
-    const fullName = `${profile.firstName} ${profile.lastName}`.trim() || '[Your Name]';
-    const email = profile.email || '[your@email.com]';
-    const phone = profile.phone || '[your phone number]';
+    const fullName = `${profile.firstName} ${profile.lastName}`.trim();
+    const email = profile.email.trim();
+    const phone = profile.phone.trim();
     const addressParts = [
       profile.address,
       profile.city,
       profile.stateRegion,
       profile.postalCode,
       profile.country
-    ].filter(Boolean);
-    const addressLine = addressParts.length ? addressParts.join(', ') : '[your address]';
+    ].map((value) => value.trim()).filter(Boolean);
+    const addressLine = addressParts.length ? addressParts.join(', ') : '';
+
+    const detailLines = [];
+    if (fullName) detailLines.push(`Full name: ${fullName}`);
+    if (email) detailLines.push(`Email: ${email}`);
+    if (phone) detailLines.push(`Phone: ${phone}`);
+    if (addressLine) detailLines.push(`Address: ${addressLine}`);
+
+    const detailsBlock = detailLines.length
+      ? detailLines.join('\n')
+      : 'Full name:\nEmail:\nPhone:\nAddress:';
 
     return `Subject: Data deletion request
 
@@ -281,15 +291,12 @@ Hello ${broker.name} Privacy Team,
 
 I am requesting that you delete or suppress my personal information from your records and any public-facing products.
 
-Full name: ${fullName}
-Email: ${email}
-Phone: ${phone}
-Address: ${addressLine}
+${detailsBlock}
 
 Please confirm when my request has been processed.
 
 Thank you,
-${fullName}`;
+${fullName || 'Your name'}`;
   };
 
   const handleCopyTemplate = async (broker) => {
