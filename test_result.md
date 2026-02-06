@@ -145,6 +145,9 @@
 ##         -working: false
 ##         -agent: "testing"
 ##         -comment: "Workflow green, but GitHub Pages still 404. Agent confirmed app functionality (localStorage, templates, export/import) works in local environment and no analytics present, yet live site unreachable. Deployment/path configuration still blocking full UI test." 
+##         -working: false
+##         -agent: "testing"
+##         -comment: "CRITICAL DEPLOYMENT ISSUE PERSISTS: GitHub Pages HTML loads correctly (title: 'DataWipe - Local-first data broker opt-outs') but JavaScript assets are not loading. Page shows 'You need to enable JavaScript to run this app' indicating React app is not executing. ROOT CAUSE: Asset path configuration issue - JS/CSS files not being served from correct paths in /datawiper subdirectory. GitHub Actions workflow builds successfully but assets are not accessible at runtime. CANNOT COMPLETE UI TESTING until JavaScript loading is fixed. Need to verify asset paths in build output and GitHub Pages serving configuration." 
 ## metadata:
 ##   created_by: "main_agent"
 ##   version: "1.0"
