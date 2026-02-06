@@ -739,20 +739,24 @@ ${fullName}`;
                             onChange={() => toggleBroker(broker.id)}
                             className="mt-1 h-4 w-4 rounded border-secondary-500 text-primary-500 focus:ring-primary-500"
                           />
-                          <span>
+                          <div>
                             <span className="block font-semibold text-white">{broker.name}</span>
                             <span className="block text-xs text-secondary-500">
-                              {broker.method} · {broker.verification}
+                              {broker.method}
+                              {broker.requirement ? ` · ${broker.requirement}` : ''}
                             </span>
-                          </span>
+                            <span className="block text-xs text-secondary-500 mt-2">
+                              {broker.instructions}
+                            </span>
+                          </div>
                         </label>
                         <a
-                          href={brokerSearchUrl(broker)}
+                          href={broker.url}
                           target="_blank"
                           rel="noreferrer"
                           className="text-xs md:text-sm px-3 py-2 rounded-xl border border-primary-500 text-primary-300 hover:bg-primary-500 hover:text-white transition-all"
                         >
-                          Find opt-out
+                          Open opt-out
                         </a>
                       </div>
                       <div className="mt-3 flex items-center gap-3">
