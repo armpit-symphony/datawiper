@@ -355,11 +355,13 @@ ${fullName}`;
     setProfile(defaultProfile);
     setSelectedBrokers({});
     setStatusByBroker({});
+    setStatusTimestamps({});
     setCopiedBrokerId(null);
     setLastSaved(null);
     if (typeof window !== 'undefined') {
       window.localStorage.removeItem(STORAGE_KEY);
     }
+    showToast('Local data cleared.', 'success');
   };
 
   const activeBrokers = BROKERS.filter((broker) => selectedBrokers[broker.id]);
