@@ -1036,6 +1036,11 @@ ${fullName}`;
               <h4 className="font-semibold text-white mb-4">Transparency</h4>
               <ul className="space-y-2 text-secondary-400">
                 <li><a href="#transparency" className="hover:text-primary-400 transition-colors">Privacy</a></li>
+                <li>
+                  <Link to="/privacy" className="hover:text-primary-400 transition-colors">
+                    Privacy policy
+                  </Link>
+                </li>
                 <li><span className="text-secondary-500">No data collection in Phase 1</span></li>
               </ul>
             </div>
