@@ -1,0 +1,24 @@
+{
+  "profile": {
+    "firstName": "Sarah",
+    "lastName": "Johnson",
+    "email": "sarah.johnson@email.com",
+    "phone": "(415) 123-4567",
+    "address": "456 Oak Avenue",
+    "city": "San Francisco",
+    "stateRegion": "CA",
+    "postalCode": "94102",
+    "country": "United States"
+  },
+  "selectedBrokers": {
+    "acxiom": true,
+    "spokeo": true,
+    "whitepages": true
+  },
+  "statusByBroker": {
+    "acxiom": "in_progress",
+    "spokeo": "submitted",
+    "whitepages": "not_started"
+  },
+  "updatedAt": "2026-02-06T20:14:39.498Z"
+}
