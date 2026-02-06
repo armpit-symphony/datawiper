@@ -390,7 +390,7 @@ ${fullName}`;
     {
       icon: <CheckCircle className="w-8 h-8" />,
       title: 'Progress tracking',
-      description: 'Track each broker from not started to completed, all stored locally.'
+      description: 'Track each broker with timestamps and optional 30-day reminders, all stored locally.'
     },
     {
       icon: <Download className="w-8 h-8" />,
