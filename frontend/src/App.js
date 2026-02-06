@@ -722,8 +722,8 @@ ${fullName}`;
                 <h3 className="text-2xl font-semibold text-white">2. Select brokers</h3>
               </div>
               <p className="text-secondary-400 mb-6">
-                Choose the brokers you want to opt out from. We open a search tab so you can pick the official opt-out
-                page.
+                Choose the brokers you want to opt out from. We link you directly to the official opt-out page for
+                each broker.
               </p>
               <div className="space-y-4 max-h-[520px] overflow-y-auto pr-2">
                 {BROKERS.map((broker) => {
