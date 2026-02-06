@@ -423,6 +423,21 @@ ${fullName}`;
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-secondary-950 via-secondary-900 to-primary-950">
+
+      {toast ? (
+        <div className="fixed top-24 right-6 z-50" role="status" aria-live="polite">
+          <div
+            className={`px-4 py-3 rounded-xl border shadow-lg ${
+              toast.type === 'error'
+                ? 'bg-red-500/90 border-red-300 text-white'
+                : 'bg-emerald-500/90 border-emerald-300 text-white'
+            }`}
+          >
+            {toast.message}
+          </div>
+        </div>
+      ) : null}
+
       {/* Navigation */}
       <motion.nav
         initial={{ y: -100, opacity: 0 }}
