@@ -344,9 +344,10 @@ ${fullName}`;
       setStatusTimestamps(parsed.statusTimestamps || {});
       setLastSaved(parsed.updatedAt || null);
       event.target.value = '';
+      showToast('Import successful. Your local plan is restored.', 'success');
     } catch (error) {
       console.error('Failed to import data.', error);
-      window.alert('Invalid file. Please choose a valid DataWipe export.');
+      showToast('Invalid JSON file. Please upload a DataWipe export.', 'error');
     }
   };
 
