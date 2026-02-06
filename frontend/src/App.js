@@ -861,22 +861,57 @@ ${fullName}`;
                           Open opt-out
                         </a>
                       </div>
-                      <div className="mt-3 flex items-center gap-3">
-                        <span className="text-xs uppercase tracking-wide text-secondary-500">Status</span>
-                        <select
-                          value={statusByBroker[broker.id] || 'not_started'}
-                          onChange={(e) => updateStatus(broker.id, e.target.value)}
-                          disabled={!isSelected}
-                          className={`bg-secondary-800/50 border border-secondary-600 rounded-xl px-3 py-2 text-sm text-white ${
-                            isSelected ? 'focus:ring-primary-500 focus:border-primary-500' : 'opacity-50 cursor-not-allowed'
-                          }`}
-                        >
-                          {STATUS_OPTIONS.map((option) => (
-                            <option key={option.value} value={option.value}>
-                              {option.label}
-                            </option>
-                          ))}
-                        </select>
+                      <div className="mt-3">
+                        <div className="flex items-center gap-3">
+                          <label htmlFor={statusId} className="text-xs uppercase tracking-wide text-secondary-500">
+                            Status
+                          </label>
+                          <select
+                            id={statusId}
+                            aria-label={`${broker.name} status`}
+                            value={statusByBroker[broker.id] || 'not_started'}
+                            onChange={(e) => updateStatus(broker.id, e.target.value)}
+                            disabled={!isSelected}
+                            className={`bg-secondary-800/50 border border-secondary-600 rounded-xl px-3 py-2 text-sm text-white ${
+                              isSelected ? 'focus:ring-primary-500 focus:border-primary-500' : 'opacity-50 cursor-not-allowed'
+                            }`}
+                          >
+                            {STATUS_OPTIONS.map((option) => (
+                              <option key={option.value} value={option.value}>
+                                {option.label}
+                              </option>
+                            ))}
+                          </select>
+                        </div>
+                        {timestamp.updatedAt ? (
+                          <p className="text-xs text-secondary-500 mt-2">
+                            Last updated: {formatTimestamp(timestamp.updatedAt)}
+                          </p>
+                        ) : null}
+                        {timestamp.submittedAt ? (
+                          <div className="mt-2 flex flex-wrap items-center gap-3 text-xs text-secondary-500">
+                            <span>Submitted: {formatTimestamp(timestamp.submittedAt)}</span>
+                            <button
+                              type="button"
+                              onClick={() => downloadReminder(broker, 'submitted')}
+                              className="px-2 py-1 rounded-lg border border-primary-500 text-primary-300 hover:bg-primary-500 hover:text-white transition-all"
+                            >
+                              Download {REMINDER_DAYS}-day reminder (.ics)
+                            </button>
+                          </div>
+                        ) : null}
+                        {timestamp.completedAt ? (
+                          <div className="mt-2 flex flex-wrap items-center gap-3 text-xs text-secondary-500">
+                            <span>Completed: {formatTimestamp(timestamp.completedAt)}</span>
+                            <button
+                              type="button"
+                              onClick={() => downloadReminder(broker, 'completed')}
+                              className="px-2 py-1 rounded-lg border border-primary-500 text-primary-300 hover:bg-primary-500 hover:text-white transition-all"
+                            >
+                              Download {REMINDER_DAYS}-day reminder (.ics)
+                            </button>
+                          </div>
+                        ) : null}
                       </div>
                     </div>
                   );
