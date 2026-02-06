@@ -135,7 +135,10 @@
 ##         -comment: "CRITICAL DEPLOYMENT ISSUE: GitHub Pages site returns 404 'Site not found' at https://Armpit-symphony.github.io/datawipe. Tested multiple URL variations - all return 404. Cannot test application functionality until GitHub Pages deployment is fixed. Likely causes: Pages not enabled, wrong publishing source, private repo, or missing index.html in root."
 ##         -working: false
 ##         -agent: "testing"
-##         -comment: "Frontend testing blocked: GitHub Pages URL https://Armpit-symphony.github.io/datawipe returned 404 (Site not found). Unable to execute UI tests until deployment is fixed." 
+##         -comment: "Frontend testing blocked: GitHub Pages URL https://Armpit-symphony.github.io/datawipe returned 404 (Site not found). Unable to execute UI tests until deployment is fixed."
+##         -working: false
+##         -agent: "testing"
+##         -comment: "DEPLOYMENT STILL FAILING: After changing to GitHub Actions source, site still returns 404. Root cause: Missing .github/workflows/deploy.yml file. GitHub Actions source requires a workflow to build and deploy React app. Need to create proper workflow with checkout@v4, npm build, and deploy-pages actions. All UI testing blocked until deployment works." 
 ## metadata:
 ##   created_by: "main_agent"
 ##   version: "1.0"
