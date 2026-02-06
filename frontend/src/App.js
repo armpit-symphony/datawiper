@@ -774,6 +774,7 @@ ${fullName}`;
                 <button
                   type="button"
                   onClick={handleExport}
+                  aria-label="Export DataWipe JSON"
                   className="flex items-center gap-2 px-4 py-2 rounded-xl border border-primary-500 text-primary-300 hover:bg-primary-500 hover:text-white transition-all"
                 >
                   <Download className="w-4 h-4" />
@@ -782,6 +783,7 @@ ${fullName}`;
                 <button
                   type="button"
                   onClick={() => importInputRef.current?.click()}
+                  aria-label="Import DataWipe JSON"
                   className="flex items-center gap-2 px-4 py-2 rounded-xl border border-primary-500 text-primary-300 hover:bg-primary-500 hover:text-white transition-all"
                 >
                   <Download className="w-4 h-4 rotate-180" />
@@ -790,6 +792,7 @@ ${fullName}`;
                 <button
                   type="button"
                   onClick={handleClear}
+                  aria-label="Clear local data"
                   className="flex items-center gap-2 px-4 py-2 rounded-xl border border-secondary-500 text-secondary-300 hover:bg-secondary-700 hover:text-white transition-all"
                 >
                   Clear local data
@@ -799,9 +802,14 @@ ${fullName}`;
                   type="file"
                   accept="application/json"
                   onChange={handleImport}
+                  aria-label="Upload DataWipe JSON export"
                   className="hidden"
                 />
               </div>
+
+              <p className="text-xs text-secondary-500 mt-3">
+                Import expects a DataWipe JSON export (datawipe-local-plan.json).
+              </p>
 
               <p className="text-xs text-secondary-500 mt-4">
                 {lastSaved ? `Last saved: ${new Date(lastSaved).toLocaleString()}` : 'Local data not saved yet.'}
