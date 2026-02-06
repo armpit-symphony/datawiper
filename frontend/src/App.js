@@ -112,6 +112,7 @@ const STATUS_OPTIONS = [
 ];
 
 const STORAGE_KEY = 'datawipe_phase1_state';
+const PACK_CACHE_KEY = 'datawipe_broker_pack_cache';
 const REMINDER_DAYS = 30;
 
 const defaultProfile = {
