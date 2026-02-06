@@ -121,11 +121,11 @@
 ## frontend:
 ##   - task: "Phase 1 local-first workspace + claims update"
 ##     implemented: true
-##     working: true
+##     working: false
 ##     file: "frontend/src/App.js"
-##     stuck_count: 3
+##     stuck_count: 4
 ##     priority: "high"
-##     needs_retesting: false
+##     needs_retesting: true
 ##     status_history:
 ##         -working: "NA"
 ##         -agent: "main"
