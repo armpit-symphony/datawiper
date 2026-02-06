@@ -246,7 +246,19 @@ END:VCALENDAR`;
   };
 
   const updateStatus = (brokerId, value) => {
+    const now = new Date().toISOString();
     setStatusByBroker((prev) => ({ ...prev, [brokerId]: value }));
+    setStatusTimestamps((prev) => {
+      const existing = prev[brokerId] || {};
+      const next = { ...existing, updatedAt: now };
+      if (value === 'submitted') {
+        next.submittedAt = now;
+      }
+      if (value === 'completed') {
+        next.completedAt = now;
+      }
+      return { ...prev, [brokerId]: next };
+    });
   };
 
 
