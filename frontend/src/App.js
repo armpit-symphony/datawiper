@@ -298,7 +298,7 @@ ${fullName}`;
     {
       icon: <Database className="w-8 h-8" />,
       title: 'Guided broker list',
-      description: 'Pick common brokers and open their opt-out flows in a new tab.'
+      description: 'Pick common brokers and open their official opt-out pages in a new tab.'
     },
     {
       icon: <Mail className="w-8 h-8" />,
