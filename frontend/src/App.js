@@ -828,6 +828,8 @@ ${fullName}`;
               <div className="space-y-4 max-h-[520px] overflow-y-auto pr-2">
                 {BROKERS.map((broker) => {
                   const isSelected = !!selectedBrokers[broker.id];
+                  const statusId = `${broker.id}-status`;
+                  const timestamp = statusTimestamps[broker.id] || {};
 
                   return (
                     <div key={broker.id} className="border border-secondary-700/60 rounded-2xl p-4">
