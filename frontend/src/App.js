@@ -175,6 +175,60 @@ const DataWipeLanding = () => {
     setLastSaved(payload.updatedAt);
   }, [profile, selectedBrokers, statusByBroker, statusTimestamps]);
 
+  const showToast = (message, type = 'success') => {
+    setToast({ message, type });
+    window.setTimeout(() => setToast(null), 3000);
+  };
+
+  const formatTimestamp = (value) => {
+    if (!value) {
+      return '';
+    }
+    return new Date(value).toLocaleString();
+  };
+
+  const formatIcsDate = (date) => date.toISOString().replace(/[-:]/g, '').split('.')[0] + 'Z';
+
+  const downloadReminder = (broker, status) => {
+    const timestamps = statusTimestamps[broker.id] || {};
+    const key = status === 'submitted' ? 'submittedAt' : 'completedAt';
+    const timestamp = timestamps[key];
+
+    if (!timestamp) {
+      showToast('Add a status date before creating a reminder.', 'error');
+      return;
+    }
+
+    const reminderDate = new Date(timestamp);
+    reminderDate.setDate(reminderDate.getDate() + REMINDER_DAYS);
+
+    const summary = `Follow up on ${broker.name} opt-out (${status})`;
+    const description = `Reminder to follow up on your ${broker.name} opt-out request marked ${status}.`;
+    const ics = `BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//DataWipe//EN
+BEGIN:VEVENT
+UID:${broker.id}-${status}-${timestamp}
+DTSTAMP:${formatIcsDate(new Date())}
+DTSTART:${formatIcsDate(reminderDate)}
+SUMMARY:${summary}
+DESCRIPTION:${description}
+END:VEVENT
+END:VCALENDAR`;
+
+    const blob = new Blob([ics], { type: 'text/calendar;charset=utf-8' });
+    const url = window.URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `datawipe-${broker.id}-${status}-reminder.ics`;
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+    window.URL.revokeObjectURL(url);
+    showToast('Reminder .ics downloaded.', 'success');
+  };
+
+
   const updateProfile = (field, value) => {
     setProfile((prev) => ({ ...prev, [field]: value }));
   };
