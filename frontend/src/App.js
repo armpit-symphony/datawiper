@@ -301,7 +301,7 @@ ${fullName}`;
       setTimeout(() => setCopiedBrokerId(null), 2000);
     } catch (error) {
       console.error('Failed to copy template.', error);
-      window.alert('Copy failed. Please select and copy the text manually.');
+      showToast('Copy failed. Please select and copy the text manually.', 'error');
     }
   };
 
