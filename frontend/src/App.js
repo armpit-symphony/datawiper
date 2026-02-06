@@ -856,6 +856,7 @@ ${fullName}`;
                           href={broker.url}
                           target="_blank"
                           rel="noreferrer"
+                          aria-label={`Open ${broker.name} opt-out page`}
                           className="text-xs md:text-sm px-3 py-2 rounded-xl border border-primary-500 text-primary-300 hover:bg-primary-500 hover:text-white transition-all"
                         >
                           Open opt-out
