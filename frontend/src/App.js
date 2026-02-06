@@ -1050,6 +1050,61 @@ ${fullName}`;
   );
 };
 
+const PrivacyPolicy = () => (
+  <div className="min-h-screen bg-gradient-to-br from-secondary-950 via-secondary-900 to-primary-950">
+    <div className="container-custom section-padding">
+      <div className="max-w-3xl mx-auto">
+        <div className="flex items-center gap-3 mb-6">
+          <Shield className="w-8 h-8 text-primary-400" />
+          <span className="text-2xl font-bold gradient-text">DataWipe Privacy Policy</span>
+        </div>
+        <p className="text-secondary-300 text-lg mb-8">
+          Phase 1 is intentionally local-first. Your data stays in your browser unless you choose to export it or
+          submit an opt-out request directly to a broker.
+        </p>
+
+        <div className="glass-morphism rounded-2xl p-6 space-y-6 text-secondary-300">
+          <section>
+            <h2 className="text-xl font-semibold text-white mb-2">What we store</h2>
+            <p>
+              DataWipe stores your information only in your browser (state + localStorage). We do not maintain user
+              accounts or store data on our servers in Phase 1.
+            </p>
+          </section>
+          <section>
+            <h2 className="text-xl font-semibold text-white mb-2">Outbound requests</h2>
+            <p>
+              All opt-out requests are user-initiated. When you click an opt-out link, you are taken directly to the
+              broker’s official form where you control what is submitted.
+            </p>
+          </section>
+          <section>
+            <h2 className="text-xl font-semibold text-white mb-2">Export & import</h2>
+            <p>
+              Exported files are saved locally on your device. Importing restores your local workspace only; nothing is
+              uploaded to DataWipe servers.
+            </p>
+          </section>
+          <section>
+            <h2 className="text-xl font-semibold text-white mb-2">What we don’t collect</h2>
+            <ul className="list-disc list-inside space-y-2">
+              <li>No analytics or tracking scripts.</li>
+              <li>No EmailJS or contact form submissions.</li>
+              <li>No server-side storage of personal data.</li>
+            </ul>
+          </section>
+        </div>
+
+        <div className="mt-8 flex flex-wrap gap-4">
+          <Link to="/" className="btn-secondary">
+            Back to workspace
+          </Link>
+        </div>
+      </div>
+    </div>
+  </div>
+);
+
 function App() {
   return (
     <div className="App">
