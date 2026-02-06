@@ -163,7 +163,7 @@
 ##   current_focus:
 ##     - "Phase 1 local-first workspace + claims update"
 ##   stuck_tasks:
-##     - "Phase 1 local-first workspace + claims update"
+##     - ""
 ##   test_all: false
 ##   test_priority: "high_first"
 ## agent_communication:
