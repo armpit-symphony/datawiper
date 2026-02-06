@@ -1111,6 +1111,7 @@ function App() {
       <BrowserRouter basename={process.env.PUBLIC_URL || '/'}>
         <Routes>
           <Route path="/" element={<DataWipeLanding />} />
+          <Route path="/privacy" element={<PrivacyPolicy />} />
         </Routes>
       </BrowserRouter>
     </div>
