@@ -112,6 +112,7 @@ const STATUS_OPTIONS = [
 ];
 
 const STORAGE_KEY = 'datawipe_phase1_state';
+const REMINDER_DAYS = 30;
 
 const defaultProfile = {
   firstName: '',
