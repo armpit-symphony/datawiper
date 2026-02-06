@@ -326,6 +326,7 @@ ${fullName}`;
     link.click();
     link.remove();
     window.URL.revokeObjectURL(url);
+    showToast('Exported JSON to your downloads.', 'success');
   };
 
   const handleImport = async (event) => {
