@@ -151,6 +151,7 @@ const DataWipeLanding = () => {
       setProfile({ ...defaultProfile, ...(parsed.profile || {}) });
       setSelectedBrokers(parsed.selectedBrokers || {});
       setStatusByBroker(parsed.statusByBroker || {});
+      setStatusTimestamps(parsed.statusTimestamps || {});
       setLastSaved(parsed.updatedAt || null);
     } catch (error) {
       console.error('Failed to parse local workspace data.', error);
@@ -271,6 +272,7 @@ ${fullName}`;
       setProfile({ ...defaultProfile, ...(parsed.profile || {}) });
       setSelectedBrokers(parsed.selectedBrokers || {});
       setStatusByBroker(parsed.statusByBroker || {});
+      setStatusTimestamps(parsed.statusTimestamps || {});
       setLastSaved(parsed.updatedAt || null);
       event.target.value = '';
     } catch (error) {
