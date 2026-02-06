@@ -2,7 +2,7 @@
   "name": "frontend",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://Armpit-symphony.github.io/datawipe",
+  "homepage": "https://armpit-symphony.github.io/datawiper/",
   "dependencies": {
 
     "axios": "^1.8.4",
