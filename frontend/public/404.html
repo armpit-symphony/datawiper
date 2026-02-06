@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Redirecting…</title>
+    <script>
+      (function () {
+        var path = window.location.pathname;
+        var repo = path.split('/')[1];
+        var base = '/' + repo + '/';
+        var fullPath = path.replace(base, '');
+        var search = window.location.search;
+        var hash = window.location.hash;
+        var redirect =
+          base +
+          '?p=' +
+          encodeURIComponent(fullPath) +
+          (search ? '&q=' + encodeURIComponent(search.slice(1)) : '') +
+          (hash ? '&h=' + encodeURIComponent(hash.slice(1)) : '');
+        window.location.replace(redirect);
+      })();
+    </script>
+  </head>
+  <body>
+    <p>Redirecting…</p>
+  </body>
+</html>
