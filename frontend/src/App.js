@@ -167,12 +167,13 @@ const DataWipeLanding = () => {
       profile,
       selectedBrokers,
       statusByBroker,
+      statusTimestamps,
       updatedAt: new Date().toISOString()
     };
 
     window.localStorage.setItem(STORAGE_KEY, JSON.stringify(payload));
     setLastSaved(payload.updatedAt);
-  }, [profile, selectedBrokers, statusByBroker]);
+  }, [profile, selectedBrokers, statusByBroker, statusTimestamps]);
 
   const updateProfile = (field, value) => {
     setProfile((prev) => ({ ...prev, [field]: value }));
