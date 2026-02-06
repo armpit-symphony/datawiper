@@ -14,6 +14,21 @@
         <meta name="twitter:title" content="DataWipe - Local-first data broker opt-outs" />
         <meta name="twitter:description" content="Build a guided opt-out plan in your browser. No accounts, no server storage, transparent user-initiated requests." />
         <title>DataWipe - Local-first data broker opt-outs</title>
+        <script>
+            (function () {
+                var params = new URLSearchParams(window.location.search);
+                var p = params.get('p');
+                if (p) {
+                    var q = params.get('q');
+                    var h = params.get('h');
+                    var path = window.location.pathname;
+                    var repo = path.split('/')[1];
+                    var base = '/' + repo + '/';
+                    var newUrl = base + (p ? p : '') + (q ? '?' + q : '') + (h ? '#' + h : '');
+                    window.history.replaceState(null, '', newUrl);
+                }
+            })();
+        </script>
     </head>
     <body>
         <noscript>You need to enable JavaScript to run this app.</noscript>
