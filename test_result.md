@@ -158,3 +158,6 @@
 ##     -message: "Approved frontend testing after backend smoke test."
 ##     -agent: "testing"
 ##     -message: "CRITICAL: GitHub Pages deployment failed. Site returns 404 at https://Armpit-symphony.github.io/datawipe. All URL variations tested return 'Site not found'. Cannot perform any UI testing until deployment is fixed. Need to check: 1) GitHub Pages enabled in repo settings, 2) Publishing source configured (branch/folder), 3) Repository is public, 4) index.html exists in root, 5) Build completed successfully."
+
+##     -agent: "user"
+##     -message: "Changed GitHub Pages settings to GitHub Actions source; please retest the live site."
