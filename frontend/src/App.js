@@ -989,6 +989,11 @@ ${fullName}`;
             <p className="text-xl text-secondary-300 max-w-3xl mx-auto">
               Phase 1 is intentionally minimal to keep compliance scope low.
             </p>
+            <div className="mt-6 flex justify-center">
+              <Link to="/privacy" className="btn-secondary">
+                Read full privacy policy
+              </Link>
+            </div>
           </motion.div>
 
           <div className="grid md:grid-cols-3 gap-8">
