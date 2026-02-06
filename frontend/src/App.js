@@ -244,6 +244,7 @@ ${fullName}`;
       profile,
       selectedBrokers,
       statusByBroker,
+      statusTimestamps,
       updatedAt: new Date().toISOString()
     };
 
