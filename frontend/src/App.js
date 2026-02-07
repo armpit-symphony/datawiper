@@ -329,7 +329,7 @@ const DataWipeLanding = () => {
 
     window.localStorage.setItem(STORAGE_KEY, JSON.stringify(payload));
     setLastSaved(payload.updatedAt);
-  }, [profile, selectedBrokers, statusByBroker, statusTimestamps]);
+  }, [profile, selectedBrokers, statusByBroker, statusTimestamps, templateChannels]);
 
   const showToast = (message, type = 'success') => {
     setToast({ message, type });
