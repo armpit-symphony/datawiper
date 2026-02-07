@@ -474,6 +474,7 @@ ${fullName || 'Your name'}`;
       selectedBrokers,
       statusByBroker,
       statusTimestamps,
+      templateChannels,
       updatedAt: new Date().toISOString()
     };
 
