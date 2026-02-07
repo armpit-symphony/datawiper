@@ -946,13 +946,31 @@ ${fullName || 'Your name'}`;
                           />
                           <div>
                             <span className="block font-semibold text-white">{broker.name}</span>
-                            <span className="block text-xs text-secondary-500">
-                              {broker.method}
-                              {broker.requirement ? ` · ${broker.requirement}` : ''}
-                            </span>
-                            <span className="block text-xs text-secondary-500 mt-2">
-                              {broker.instructions}
-                            </span>
+                            {broker.form_type ? (
+                              <span className="block text-xs text-secondary-500">
+                                Form type: {broker.form_type}
+                              </span>
+                            ) : null}
+                            {broker.required_fields && broker.required_fields.length ? (
+                              <span className="block text-xs text-secondary-500">
+                                Required fields: {broker.required_fields.join(', ')}
+                              </span>
+                            ) : null}
+                            {broker.verification_steps ? (
+                              <span className="block text-xs text-secondary-500">
+                                Verification: {broker.verification_steps}
+                              </span>
+                            ) : null}
+                            {broker.response_time ? (
+                              <span className="block text-xs text-secondary-500">
+                                Response time: {broker.response_time}
+                              </span>
+                            ) : null}
+                            {broker.follow_up_guidance ? (
+                              <span className="block text-xs text-secondary-500 mt-2">
+                                Follow-up: {broker.follow_up_guidance}
+                              </span>
+                            ) : null}
                           </div>
                         </label>
                         <a
