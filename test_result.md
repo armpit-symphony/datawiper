@@ -208,6 +208,8 @@
 ##   test_priority: "high_first"
 ## agent_communication:
 ##     -agent: "main"
+##     -agent: "main"
+##     -message: "Phase 2.2 enhanced local workflow implemented (template channels, verified status, follow-up reminders). Requesting frontend retest."
 ##     -message: "Requesting frontend testing per user checklist: GH Pages smoke test, workspace flow, edge cases, privacy/network verification."
 ##     -agent: "testing"
 ##     -message: "Backend smoke test completed successfully. All API endpoints (GET /api/, GET /api/status, POST /api/status) are working correctly with 200 OK responses. FastAPI service is reachable at the configured URL. No errors found in backend logs. Created backend_test.py for future use. Ready for frontend testing."
