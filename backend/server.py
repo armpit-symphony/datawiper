@@ -55,6 +55,54 @@ class BrokerPackCreate(BaseModel):
     notes: Optional[str] = None
     updated_at: Optional[str] = None
 
+@api_router.get("/broker-packs/latest", response_model=BrokerPack)
+async def get_latest_broker_pack():
+    latest_version = await get_latest_version()
+    if not latest_version:
+        raise HTTPException(status_code=404, detail="No broker packs available")
+
+    pack = await broker_packs_collection().find_one({"_id": latest_version})
+    if not pack:
+        raise HTTPException(status_code=404, detail="Broker pack not found")
+    return BrokerPack(**sanitize_pack(pack))
+
+
+@api_router.get("/broker-packs/{version}", response_model=BrokerPack)
+async def get_broker_pack(version: str):
+    pack = await broker_packs_collection().find_one({"_id": version})
+    if not pack:
+        raise HTTPException(status_code=404, detail="Broker pack not found")
+    return BrokerPack(**sanitize_pack(pack))
+
+
+@api_router.post("/broker-packs", response_model=BrokerPack)
+async def create_broker_pack(payload: BrokerPackCreate, authorization: Optional[str] = Header(None)):
+    verify_admin_token(authorization)
+
+    existing = await broker_packs_collection().find_one({"_id": payload.version})
+    if existing:
+        raise HTTPException(status_code=409, detail="Broker pack version already exists")
+
+    created_at = datetime.utcnow().isoformat()
+    updated_at = payload.updated_at or created_at
+
+    pack_dict = payload.dict()
+    pack_dict.update({
+        "_id": payload.version,
+        "created_at": created_at,
+        "updated_at": updated_at
+    })
+
+    await broker_packs_collection().insert_one(pack_dict)
+    await broker_pack_meta_collection().update_one(
+        {"_id": "latest"},
+        {"$set": {"version": payload.version, "updated_at": created_at}},
+        upsert=True
+    )
+
+    return BrokerPack(**sanitize_pack(pack_dict))
+
+
 class BrokerPack(BaseModel):
     version: str
     created_at: str
