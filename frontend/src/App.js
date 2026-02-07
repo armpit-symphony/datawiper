@@ -12,6 +12,7 @@ import {
   ArrowRight
 } from 'lucide-react';
 import './App.css';
+import Admin from './Admin';
 
 const BROKERS = [
   {
