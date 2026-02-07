@@ -345,6 +345,13 @@ const DataWipeLanding = () => {
 
   const formatIcsDate = (date) => date.toISOString().replace(/[-:]/g, '').split('.')[0] + 'Z';
 
+  const addDays = (isoDate, days) => {
+    const date = new Date(isoDate);
+    date.setDate(date.getDate() + days);
+    return date.toISOString();
+  };
+
+
   const downloadReminder = (broker, status) => {
     const timestamps = statusTimestamps[broker.id] || {};
     const key = status === 'submitted' ? 'submittedAt' : 'completedAt';
