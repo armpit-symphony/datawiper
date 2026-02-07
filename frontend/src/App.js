@@ -1159,7 +1159,7 @@ ${fullName || 'Your name'}`;
               <div>
                 <h3 className="text-2xl font-semibold text-white">3. Request templates</h3>
                 <p className="text-secondary-400 text-sm">
-                  Copy a template and paste it into the broker opt-out flow.
+                  Select a submission channel and copy the tailored template.
                 </p>
               </div>
             </div>
