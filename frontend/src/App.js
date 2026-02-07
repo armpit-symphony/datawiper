@@ -283,6 +283,11 @@ const DataWipeLanding = () => {
         window.localStorage.setItem(PACK_CACHE_KEY, JSON.stringify({ ...normalized, fetchedAt }));
       } catch (error) {
         console.error('Failed to fetch broker pack.', error);
+
+  const updateTemplateChannel = (brokerId, value) => {
+    setTemplateChannels((prev) => ({ ...prev, [brokerId]: value }));
+  };
+
       }
     };
 
