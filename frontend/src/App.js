@@ -1299,6 +1299,7 @@ function App() {
         <Routes>
           <Route path="/" element={<DataWipeLanding />} />
           <Route path="/privacy" element={<PrivacyPolicy />} />
+          <Route path="/admin" element={<Admin />} />
         </Routes>
       </BrowserRouter>
     </div>
