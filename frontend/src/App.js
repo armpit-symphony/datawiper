@@ -162,6 +162,7 @@ const DataWipeLanding = () => {
   const [selectedBrokers, setSelectedBrokers] = React.useState({});
   const [statusByBroker, setStatusByBroker] = React.useState({});
   const [statusTimestamps, setStatusTimestamps] = React.useState({});
+  const [templateChannels, setTemplateChannels] = React.useState({});
   const [brokerPack, setBrokerPack] = React.useState(null);
   const [packVersion, setPackVersion] = React.useState('');
   const [packFetchedAt, setPackFetchedAt] = React.useState(null);
