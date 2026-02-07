@@ -1165,30 +1165,52 @@ ${fullName || 'Your name'}`;
               <p className="text-secondary-400">Select brokers above to generate templates.</p>
             ) : (
               <div className="space-y-6">
-                {activeBrokers.map((broker) => (
-                  <div key={broker.id} className="border border-secondary-700/60 rounded-2xl p-6">
-                    <div className="flex flex-wrap items-center justify-between gap-4 mb-4">
-                      <div>
-                        <h4 className="text-lg font-semibold text-white">{broker.name}</h4>
-                        <p className="text-xs text-secondary-500">
-                          Use on the broker opt-out page or via their preferred contact channel.
-                        </p>
+                {activeBrokers.map((broker) => {
+                  const channel = templateChannels[broker.id] || 'email';
+                  const channelId = `${broker.id}-channel`;
+
+                  return (
+                    <div key={broker.id} className="border border-secondary-700/60 rounded-2xl p-6">
+                      <div className="flex flex-wrap items-center justify-between gap-4 mb-4">
+                        <div>
+                          <h4 className="text-lg font-semibold text-white">{broker.name}</h4>
+                          <p className="text-xs text-secondary-500">
+                            Use on the broker opt-out page or via the submission channel you choose.
+                          </p>
+                        </div>
+                        <div className="flex flex-wrap items-center gap-3">
+                          <label htmlFor={channelId} className="text-xs text-secondary-400">
+                            Channel
+                          </label>
+                          <select
+                            id={channelId}
+                            value={channel}
+                            onChange={(event) => updateTemplateChannel(broker.id, event.target.value)}
+                            className="bg-secondary-800/50 border border-secondary-600 rounded-xl px-3 py-2 text-xs text-white"
+                          >
+                            {TEMPLATE_CHANNELS.map((option) => (
+                              <option key={option.value} value={option.value}>
+                                {option.label}
+                              </option>
+                            ))}
+                          </select>
+                          <button
+                            type="button"
+                            onClick={() => handleCopyTemplate(broker)}
+                            aria-label={`Copy ${broker.name} template`}
+                            className="text-sm px-4 py-2 rounded-xl bg-primary-500/20 text-primary-200 hover:bg-primary-500 hover:text-white transition-all flex items-center gap-2"
+                          >
+                            <Mail className="w-4 h-4" />
+                            {copiedBrokerId === broker.id ? 'Copied' : 'Copy template'}
+                          </button>
+                        </div>
                       </div>
-                      <button
-                        type="button"
-                        onClick={() => handleCopyTemplate(broker)}
-                        aria-label={`Copy ${broker.name} template`}
-                        className="text-sm px-4 py-2 rounded-xl bg-primary-500/20 text-primary-200 hover:bg-primary-500 hover:text-white transition-all flex items-center gap-2"
-                      >
-                        <Mail className="w-4 h-4" />
-                        {copiedBrokerId === broker.id ? 'Copied' : 'Copy template'}
-                      </button>
+                      <pre className="whitespace-pre-wrap text-sm text-secondary-200 bg-secondary-900/60 border border-secondary-700/60 rounded-xl p-4 max-h-60 overflow-y-auto">
+                        {generateTemplate(broker, channel)}
+                      </pre>
                     </div>
-                    <pre className="whitespace-pre-wrap text-sm text-secondary-200 bg-secondary-900/60 border border-secondary-700/60 rounded-xl p-4 max-h-60 overflow-y-auto">
-                      {generateTemplate(broker)}
-                    </pre>
-                  </div>
-                ))}
+                  );
+                })}
               </div>
             )}
           </div>
