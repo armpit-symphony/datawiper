@@ -136,6 +136,24 @@ const DataWipeLanding = () => {
   const [packVersion, setPackVersion] = React.useState('');
   const [packFetchedAt, setPackFetchedAt] = React.useState(null);
   const [copiedBrokerId, setCopiedBrokerId] = React.useState(null);
+
+  const baseUrl = (process.env.PUBLIC_URL || '').replace(/\/$/, '');
+
+  const normalizeBroker = (broker) => ({
+    ...broker,
+    url: broker.url || broker.opt_out_url || broker.optOutUrl || '',
+    form_type: broker.form_type || broker.formType || broker.method || 'web',
+    required_fields: broker.required_fields || broker.requiredFields || [],
+    verification_steps: broker.verification_steps || broker.verificationSteps || broker.instructions || '',
+    response_time: broker.response_time || broker.responseTime || '',
+    follow_up_guidance: broker.follow_up_guidance || broker.followUpGuidance || ''
+  });
+
+  const normalizePack = (pack) => ({
+    ...pack,
+    brokers: Array.isArray(pack.brokers) ? pack.brokers.map(normalizeBroker) : []
+  });
+
   const [lastSaved, setLastSaved] = React.useState(null);
   const [toast, setToast] = React.useState(null);
   const importInputRef = React.useRef(null);
