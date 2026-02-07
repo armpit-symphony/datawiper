@@ -208,7 +208,33 @@ const DataWipeLanding = () => {
     }
 
     const fetchPack = async () => {
+      const cachedRaw = window.localStorage.getItem(PACK_CACHE_KEY);
+      const cached = cachedRaw ? JSON.parse(cachedRaw) : null;
+      const cachedVersion = cached?.version || '';
+
       try {
+        if (backendBase) {
+          const backendResponse = await fetch(`${backendBase}/api/broker-packs/latest`, { cache: 'no-store' });
+          if (backendResponse.ok) {
+            const pack = await backendResponse.json();
+            const normalized = normalizePack(pack);
+            const latestVersion = normalized.version || '';
+
+            if (cachedVersion && cachedVersion === latestVersion) {
+              setPackVersion(latestVersion);
+              setPackFetchedAt(cached?.fetchedAt || null);
+              return;
+            }
+
+            const fetchedAt = new Date().toISOString();
+            setBrokerPack(normalized);
+            setPackVersion(latestVersion);
+            setPackFetchedAt(fetchedAt);
+            window.localStorage.setItem(PACK_CACHE_KEY, JSON.stringify({ ...normalized, fetchedAt }));
+            return;
+          }
+        }
+
         const latestResponse = await fetch(`${baseUrl}/broker-packs/latest.json`, { cache: 'no-store' });
         if (!latestResponse.ok) {
           throw new Error('Latest broker pack not found');
@@ -217,11 +243,10 @@ const DataWipeLanding = () => {
         const latest = await latestResponse.json();
         const latestVersion = latest.version;
         const latestUrl = latest.url || `/broker-packs/${latestVersion}.json`;
-        const cachedRaw = window.localStorage.getItem(PACK_CACHE_KEY);
-        const cachedVersion = cachedRaw ? JSON.parse(cachedRaw).version : '';
 
         if (cachedVersion && cachedVersion === latestVersion) {
           setPackVersion(latestVersion || '');
+          setPackFetchedAt(cached?.fetchedAt || null);
           return;
         }
 
