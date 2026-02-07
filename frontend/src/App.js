@@ -163,6 +163,74 @@ const DataWipeLanding = () => {
       return;
     }
 
+    const cached = window.localStorage.getItem(PACK_CACHE_KEY);
+    if (!cached) {
+      return;
+    }
+
+    try {
+      const parsed = JSON.parse(cached);
+      const normalized = normalizePack(parsed);
+      setBrokerPack(normalized);
+      setPackVersion(normalized.version || '');
+      setPackFetchedAt(parsed.fetchedAt || null);
+    } catch (error) {
+      console.error('Failed to parse broker pack cache.', error);
+    }
+  }, []);
+
+  React.useEffect(() => {
+    if (typeof window === 'undefined') {
+      return;
+    }
+
+    const fetchPack = async () => {
+      try {
+        const latestResponse = await fetch(`${baseUrl}/broker-packs/latest.json`, { cache: 'no-store' });
+        if (!latestResponse.ok) {
+          throw new Error('Latest broker pack not found');
+        }
+
+        const latest = await latestResponse.json();
+        const latestVersion = latest.version;
+        const latestUrl = latest.url || `/broker-packs/${latestVersion}.json`;
+        const cachedRaw = window.localStorage.getItem(PACK_CACHE_KEY);
+        const cachedVersion = cachedRaw ? JSON.parse(cachedRaw).version : '';
+
+        if (cachedVersion && cachedVersion === latestVersion && brokerPack) {
+          setPackVersion(latestVersion || '');
+          return;
+        }
+
+        const packUrl = latestUrl.startsWith('http')
+          ? latestUrl
+          : `${baseUrl}${latestUrl.startsWith('/') ? '' : '/'}${latestUrl}`;
+        const packResponse = await fetch(packUrl, { cache: 'no-store' });
+        if (!packResponse.ok) {
+          throw new Error('Broker pack fetch failed');
+        }
+
+        const pack = await packResponse.json();
+        const normalized = normalizePack({ ...pack, version: pack.version || latestVersion });
+        const fetchedAt = new Date().toISOString();
+        setBrokerPack(normalized);
+        setPackVersion(normalized.version || '');
+        setPackFetchedAt(fetchedAt);
+        window.localStorage.setItem(PACK_CACHE_KEY, JSON.stringify({ ...normalized, fetchedAt }));
+      } catch (error) {
+        console.error('Failed to fetch broker pack.', error);
+      }
+    };
+
+    fetchPack();
+  }, [baseUrl, brokerPack]);
+
+
+  React.useEffect(() => {
+    if (typeof window === 'undefined') {
+      return;
+    }
+
     const stored = window.localStorage.getItem(STORAGE_KEY);
     if (!stored) {
       return;
