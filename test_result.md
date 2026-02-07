@@ -195,7 +195,7 @@
 ##     - "Admin UI (Phase 2.1c)"
 ##     - "Phase 1 local-first workspace + claims update"
 ##   stuck_tasks:
-##     - ""
+##     - "Admin UI (Phase 2.1c)"
 ##   test_all: false
 ##   test_priority: "high_first"
 ## agent_communication:
