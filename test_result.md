@@ -212,6 +212,8 @@
 ## agent_communication:
 ##     -agent: "main"
 ##     -agent: "main"
+##     -agent: "main"
+##     -message: "Applied fixes for template channel selection and auto-fill; requesting frontend retest."
 ##     -message: "Phase 2.2 enhanced local workflow implemented (template channels, verified status, follow-up reminders). Requesting frontend retest."
 ##     -message: "Requesting frontend testing per user checklist: GH Pages smoke test, workspace flow, edge cases, privacy/network verification."
 ##     -agent: "testing"
