@@ -1,0 +1,116 @@
+{
+  "version": "1.0.0",
+  "updated_at": "2025-07-15",
+  "brokers": [
+    {
+      "id": "acxiom",
+      "name": "Acxiom",
+      "opt_out_url": "https://isapps.acxiom.com/optout/optout.aspx",
+      "form_type": "web",
+      "required_fields": ["Full name", "Address", "Email"],
+      "verification_steps": "Scroll to “Consumer Opt Out Form” and submit; follow on-screen verification if prompted.",
+      "response_time": "Varies; check confirmation email.",
+      "follow_up_guidance": "If no response after 30 days, resubmit the request."
+    },
+    {
+      "id": "spokeo",
+      "name": "Spokeo",
+      "opt_out_url": "https://www.spokeo.com/optout",
+      "form_type": "web",
+      "required_fields": ["Profile URL", "Email"],
+      "verification_steps": "Paste your profile URL and submit; verify via email if prompted.",
+      "response_time": "Varies; check confirmation email.",
+      "follow_up_guidance": "Recheck your listing after a few days; resubmit if needed."
+    },
+    {
+      "id": "whitepages",
+      "name": "Whitepages",
+      "opt_out_url": "https://www.whitepages.com/suppression-requests",
+      "form_type": "web",
+      "required_fields": ["Profile URL", "Email or phone"],
+      "verification_steps": "Paste your profile URL and complete verification (may require phone or email).",
+      "response_time": "Varies; check confirmation email.",
+      "follow_up_guidance": "Recheck your listing after a few days; resubmit if needed."
+    },
+    {
+      "id": "beenverified",
+      "name": "BeenVerified",
+      "opt_out_url": "https://www.beenverified.com/app/optout/search",
+      "form_type": "web",
+      "required_fields": ["Name", "Email"],
+      "verification_steps": "Search for your listing and verify via email.",
+      "response_time": "Varies; check confirmation email.",
+      "follow_up_guidance": "Recheck your listing after a few days; resubmit if needed."
+    },
+    {
+      "id": "intelius",
+      "name": "Intelius (PeopleConnect)",
+      "opt_out_url": "https://suppression.peopleconnect.us",
+      "form_type": "web",
+      "required_fields": ["Full name", "Email"],
+      "verification_steps": "Use the PeopleConnect suppression tool and verify via email.",
+      "response_time": "Varies; check confirmation email.",
+      "follow_up_guidance": "If your record persists, repeat suppression after 30 days."
+    },
+    {
+      "id": "peoplefinders",
+      "name": "PeopleFinders",
+      "opt_out_url": "https://www.peoplefinders.com/opt-out",
+      "form_type": "web",
+      "required_fields": ["Full name", "Email"],
+      "verification_steps": "Submit the opt-out form and verify via email if prompted.",
+      "response_time": "Varies; check confirmation email.",
+      "follow_up_guidance": "Recheck your listing after a few days; resubmit if needed."
+    },
+    {
+      "id": "truthfinder",
+      "name": "TruthFinder",
+      "opt_out_url": "https://suppression.peopleconnect.us",
+      "form_type": "web",
+      "required_fields": ["Full name", "Email"],
+      "verification_steps": "Use the PeopleConnect suppression tool and verify via email.",
+      "response_time": "Varies; check confirmation email.",
+      "follow_up_guidance": "If your record persists, repeat suppression after 30 days."
+    },
+    {
+      "id": "mylife",
+      "name": "MyLife",
+      "opt_out_url": "https://www.mylife.com/ccpa/index.pubview",
+      "form_type": "web",
+      "required_fields": ["Full name", "Email", "Address"],
+      "verification_steps": "Complete the CCPA opt-out form.",
+      "response_time": "Varies; check confirmation email.",
+      "follow_up_guidance": "If no response after 30 days, resubmit."
+    },
+    {
+      "id": "lexisnexis",
+      "name": "LexisNexis",
+      "opt_out_url": "https://optout.lexisnexis.com",
+      "form_type": "web",
+      "required_fields": ["Full name", "Address", "Email"],
+      "verification_steps": "Submit the suppression request form.",
+      "response_time": "Up to 30 days.",
+      "follow_up_guidance": "If no response after 30 days, resubmit or contact LexisNexis support."
+    },
+    {
+      "id": "radaris",
+      "name": "Radaris",
+      "opt_out_url": "https://radaris.com",
+      "form_type": "web",
+      "required_fields": ["Profile listing"],
+      "verification_steps": "Find your profile and click “Remove my information.”",
+      "response_time": "Varies; check listing after a few days.",
+      "follow_up_guidance": "Repeat removal if the listing reappears."
+    },
+    {
+      "id": "zoominfo",
+      "name": "ZoomInfo",
+      "opt_out_url": "https://privacy.zoominfo.com",
+      "form_type": "web",
+      "required_fields": ["Full name", "Email"],
+      "verification_steps": "Submit the Privacy Center opt-out request.",
+      "response_time": "Varies; check confirmation email.",
+      "follow_up_guidance": "Follow up after 30 days if still listed."
+    }
+  ]
+}
