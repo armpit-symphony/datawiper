@@ -197,7 +197,7 @@ const DataWipeLanding = () => {
         const cachedRaw = window.localStorage.getItem(PACK_CACHE_KEY);
         const cachedVersion = cachedRaw ? JSON.parse(cachedRaw).version : '';
 
-        if (cachedVersion && cachedVersion === latestVersion && brokerPack) {
+        if (cachedVersion && cachedVersion === latestVersion) {
           setPackVersion(latestVersion || '');
           return;
         }
