@@ -427,6 +427,11 @@ END:VCALENDAR`;
     });
   };
 
+  const updateTemplateChannel = (brokerId, value) => {
+    setTemplateChannels((prev) => ({ ...prev, [brokerId]: value }));
+  };
+
+
 
   const generateTemplate = (broker, channel) => {
     const fullName = `${profile.firstName} ${profile.lastName}`.trim();
