@@ -118,6 +118,18 @@
 ##         -working: true
 ##         -agent: "testing"
 ##         -comment: "Backend smoke test PASSED. All API endpoints working correctly: GET /api/ (200 OK), GET /api/status (200 OK), POST /api/status (200 OK). FastAPI service is reachable at https://wipefix.preview.emergentagent.com/api. Backend logs show no errors. Created backend_test.py for future testing."
+##   - task: "Broker pack API (Phase 2.1b)"
+##     implemented: true
+##     working: "NA"
+##     file: "backend/server.py"
+##     stuck_count: 0
+##     priority: "high"
+##     needs_retesting: true
+##     status_history:
+##         -working: "NA"
+##         -agent: "main"
+##         -comment: "Added broker pack CRUD (public read, admin write) with admin token auth, Mongo metadata-only storage, and latest pointer." 
+
 ## frontend:
 ##   - task: "Phase 1 local-first workspace + claims update"
 ##     implemented: true
