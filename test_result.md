@@ -201,7 +201,7 @@
 ##   run_ui: true
 ## test_plan:
 ##   current_focus:
-##     - "Admin UI (Phase 2.1c)"
+##     - "Enhanced Local Workflow (Phase 2.2)"
 ##     - "Phase 1 local-first workspace + claims update"
 ##   stuck_tasks:
 ##   test_all: false
