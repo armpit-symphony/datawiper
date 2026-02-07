@@ -491,7 +491,8 @@ ${fullName || 'Your name'}`;
   };
 
   const handleCopyTemplate = async (broker) => {
-    const template = generateTemplate(broker);
+    const channel = templateChannels[broker.id] || 'email';
+    const template = generateTemplate(broker, channel);
 
     try {
       await navigator.clipboard.writeText(template);
