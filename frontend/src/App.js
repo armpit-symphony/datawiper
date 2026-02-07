@@ -306,6 +306,7 @@ const DataWipeLanding = () => {
       setSelectedBrokers(parsed.selectedBrokers || {});
       setStatusByBroker(parsed.statusByBroker || {});
       setStatusTimestamps(parsed.statusTimestamps || {});
+      setTemplateChannels(parsed.templateChannels || {});
       setLastSaved(parsed.updatedAt || null);
     } catch (error) {
       console.error('Failed to parse local workspace data.', error);
