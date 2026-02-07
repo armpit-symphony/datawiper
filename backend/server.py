@@ -49,6 +49,13 @@ class BrokerEntry(BaseModel):
     response_time: Optional[str] = ''
     follow_up_guidance: Optional[str] = ''
 
+class BrokerPack(BaseModel):
+    version: str
+    created_at: str
+    updated_at: str
+    brokers: List[BrokerEntry]
+    notes: Optional[str] = None
+
 class BrokerPackCreate(BaseModel):
     version: str
     brokers: List[BrokerEntry]
