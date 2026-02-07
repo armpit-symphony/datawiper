@@ -446,15 +446,10 @@ END:VCALENDAR`;
     ].map((value) => value.trim()).filter(Boolean);
     const addressLine = addressParts.length ? addressParts.join(', ') : '';
 
-    const detailLines = [];
-    if (fullName) detailLines.push(`Full name: ${fullName}`);
-    if (email) detailLines.push(`Email: ${email}`);
-    if (phone) detailLines.push(`Phone: ${phone}`);
-    if (addressLine) detailLines.push(`Address: ${addressLine}`);
-
-    const detailsBlock = detailLines.length
-      ? detailLines.join('\n')
-      : 'Full name:\nEmail:\nPhone:\nAddress:';
+    const detailsBlock = `Full name: ${fullName || ''}
+Email: ${email || ''}
+Phone: ${phone || ''}
+Address: ${addressLine || ''}`;
 
     const confirmationLine = email
       ? `Please send confirmation to ${email}.`
