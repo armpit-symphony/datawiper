@@ -352,26 +352,24 @@ const DataWipeLanding = () => {
   };
 
 
-  const downloadReminder = (broker, status) => {
+  const downloadReminder = (broker) => {
     const timestamps = statusTimestamps[broker.id] || {};
-    const key = status === 'submitted' ? 'submittedAt' : 'completedAt';
-    const timestamp = timestamps[key];
+    const followUpAt = timestamps.followUpAt;
 
-    if (!timestamp) {
-      showToast('Add a status date before creating a reminder.', 'error');
+    if (!followUpAt) {
+      showToast('Add a submitted or verified date before creating a follow-up reminder.', 'error');
       return;
     }
 
-    const reminderDate = new Date(timestamp);
-    reminderDate.setDate(reminderDate.getDate() + REMINDER_DAYS);
+    const reminderDate = new Date(followUpAt);
 
-    const summary = `Follow up on ${broker.name} opt-out (${status})`;
-    const description = `Reminder to follow up on your ${broker.name} opt-out request marked ${status}.`;
+    const summary = `Follow up on ${broker.name} opt-out`;
+    const description = `Reminder to follow up on your ${broker.name} opt-out request.`;
     const ics = `BEGIN:VCALENDAR
 VERSION:2.0
 PRODID:-//DataWipe//EN
 BEGIN:VEVENT
-UID:${broker.id}-${status}-${timestamp}
+UID:${broker.id}-followup-${followUpAt}
 DTSTAMP:${formatIcsDate(new Date())}
 DTSTART:${formatIcsDate(reminderDate)}
 SUMMARY:${summary}
@@ -383,12 +381,12 @@ END:VCALENDAR`;
     const url = window.URL.createObjectURL(blob);
     const link = document.createElement('a');
     link.href = url;
-    link.download = `datawipe-${broker.id}-${status}-reminder.ics`;
+    link.download = `datawipe-${broker.id}-followup-reminder.ics`;
     document.body.appendChild(link);
     link.click();
     link.remove();
     window.URL.revokeObjectURL(url);
-    showToast('Reminder .ics downloaded.', 'success');
+    showToast('Follow-up reminder downloaded.', 'success');
   };
 
 
