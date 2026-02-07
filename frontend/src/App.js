@@ -323,6 +323,7 @@ const DataWipeLanding = () => {
       selectedBrokers,
       statusByBroker,
       statusTimestamps,
+      templateChannels,
       updatedAt: new Date().toISOString()
     };
 
