@@ -223,7 +223,7 @@ const DataWipeLanding = () => {
     };
 
     fetchPack();
-  }, [baseUrl, brokerPack]);
+  }, [baseUrl]);
 
 
   React.useEffect(() => {
