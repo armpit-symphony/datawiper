@@ -151,6 +151,9 @@
 ##         -comment: "Phase 2.1 updates: broker pack fetch + caching, timestamps with 30-day reminders, export/import toasts, 404 redirect support, accessibility labels, privacy policy route, and auto-filled templates."
 ##         -working: "NA"
 ##         -agent: "main"
+##         -comment: "Phase 2.1c: added Admin UI route (/admin), new Admin component for publishing broker packs, and frontend .env.example with REACT_APP_ADMIN_TOKEN."
+##         -working: "NA"
+##         -agent: "main"
 ##         -comment: "Added .gitignore to exclude .env files and prepared frontend for retesting broker pack fetch."
 ##         -working: false
 ##         -agent: "testing"
