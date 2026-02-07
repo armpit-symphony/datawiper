@@ -131,7 +131,14 @@ const STATUS_OPTIONS = [
   { value: 'not_started', label: 'Not started' },
   { value: 'in_progress', label: 'In progress' },
   { value: 'submitted', label: 'Submitted' },
+  { value: 'verified', label: 'Verified' },
   { value: 'completed', label: 'Completed' }
+];
+
+const TEMPLATE_CHANNELS = [
+  { value: 'email', label: 'Email' },
+  { value: 'web_form', label: 'Web form' },
+  { value: 'fax_mail', label: 'Fax/Mail' }
 ];
 
 const STORAGE_KEY = 'datawipe_phase1_state';
