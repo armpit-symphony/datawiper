@@ -146,6 +146,9 @@
 ##         -working: "NA"
 ##         -agent: "main"
 ##         -comment: "Removed EmailJS and beta signup, added local-only workspace (profile form, broker list, status tracking, templates, export/import), updated copy/claims, and set router basename to PUBLIC_URL."
+##         -working: "NA"
+##         -agent: "main"
+##         -comment: "Phase 2.1 updates: broker pack fetch + caching, timestamps with 30-day reminders, export/import toasts, 404 redirect support, accessibility labels, privacy policy route, and auto-filled templates."
 ##         -working: false
 ##         -agent: "testing"
 ##         -comment: "CRITICAL DEPLOYMENT ISSUE: GitHub Pages site returns 404 'Site not found' at https://Armpit-symphony.github.io/datawipe. Tested multiple URL variations - all return 404. Cannot test application functionality until GitHub Pages deployment is fixed. Likely causes: Pages not enabled, wrong publishing source, private repo, or missing index.html in root."
