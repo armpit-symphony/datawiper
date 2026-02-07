@@ -1120,29 +1120,28 @@ ${fullName || 'Your name'}`;
                             Last updated: {formatTimestamp(timestamp.updatedAt)}
                           </p>
                         ) : null}
-                        {timestamp.submittedAt ? (
-                          <div className="mt-2 flex flex-wrap items-center gap-3 text-xs text-secondary-500">
-                            <span>Submitted: {formatTimestamp(timestamp.submittedAt)}</span>
-                            <button
-                              type="button"
-                              onClick={() => downloadReminder(broker, 'submitted')}
-                              className="px-2 py-1 rounded-lg border border-primary-500 text-primary-300 hover:bg-primary-500 hover:text-white transition-all"
-                            >
-                              Download {REMINDER_DAYS}-day reminder (.ics)
-                            </button>
-                          </div>
-                        ) : null}
-                        {timestamp.completedAt ? (
-                          <div className="mt-2 flex flex-wrap items-center gap-3 text-xs text-secondary-500">
-                            <span>Completed: {formatTimestamp(timestamp.completedAt)}</span>
-                            <button
-                              type="button"
-                              onClick={() => downloadReminder(broker, 'completed')}
-                              className="px-2 py-1 rounded-lg border border-primary-500 text-primary-300 hover:bg-primary-500 hover:text-white transition-all"
-                            >
-                              Download {REMINDER_DAYS}-day reminder (.ics)
-                            </button>
-                          </div>
+                        <div className="mt-2 space-y-1 text-xs text-secondary-500">
+                          {timestamp.submittedAt ? (
+                            <div>Submitted: {formatTimestamp(timestamp.submittedAt)}</div>
+                          ) : null}
+                          {timestamp.verifiedAt ? (
+                            <div>Verified: {formatTimestamp(timestamp.verifiedAt)}</div>
+                          ) : null}
+                          {timestamp.completedAt ? (
+                            <div>Completed: {formatTimestamp(timestamp.completedAt)}</div>
+                          ) : null}
+                          {timestamp.followUpAt ? (
+                            <div>Follow-up: {formatTimestamp(timestamp.followUpAt)}</div>
+                          ) : null}
+                        </div>
+                        {timestamp.followUpAt ? (
+                          <button
+                            type="button"
+                            onClick={() => downloadReminder(broker)}
+                            className="mt-2 px-2 py-1 rounded-lg border border-primary-500 text-primary-300 hover:bg-primary-500 hover:text-white transition-all text-xs"
+                          >
+                            Download follow-up reminder (.ics)
+                          </button>
                         ) : null}
                       </div>
                     </div>
