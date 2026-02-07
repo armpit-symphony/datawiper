@@ -886,8 +886,11 @@ ${fullName || 'Your name'}`;
                 <UserCheck className="w-6 h-6 text-primary-400" />
                 <h3 className="text-2xl font-semibold text-white">1. Your info (stored locally)</h3>
               </div>
-              <p className="text-secondary-400 mb-6">
+              <p className="text-secondary-400 mb-2">
                 We never send this anywhere. It lives in your browser until you export or clear it.
+              </p>
+              <p className="text-xs text-secondary-500 mb-6">
+                Saved profiles auto-fill here, and edits update immediately.
               </p>
 
               <div className="grid md:grid-cols-2 gap-4">
