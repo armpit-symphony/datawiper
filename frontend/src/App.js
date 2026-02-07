@@ -431,11 +431,6 @@ END:VCALENDAR`;
   const generateTemplate = (broker, channel) => {
     const fullName = `${profile.firstName} ${profile.lastName}`.trim();
     const email = profile.email.trim();
-
-  const updateTemplateChannel = (brokerId, value) => {
-    setTemplateChannels((prev) => ({ ...prev, [brokerId]: value }));
-  };
-
     const phone = profile.phone.trim();
     const addressParts = [
       profile.address,
