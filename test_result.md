@@ -130,6 +130,9 @@
 ##         -agent: "main"
 ##         -comment: "Added broker pack CRUD (public read, admin write) with admin token auth, Mongo metadata-only storage, and latest pointer." 
 
+##         -working: "NA"
+##         -agent: "main"
+##         -comment: "Phase 2.1 updates: broker pack fetch + caching, timestamps with 30-day reminders, export/import toasts, 404 redirect support, accessibility labels, privacy policy route, and auto-filled templates."
 ## frontend:
 ##   - task: "Phase 1 local-first workspace + claims update"
 ##     implemented: true
