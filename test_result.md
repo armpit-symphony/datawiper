@@ -120,11 +120,11 @@
 ##         -comment: "Backend smoke test PASSED. All API endpoints working correctly: GET /api/ (200 OK), GET /api/status (200 OK), POST /api/status (200 OK). FastAPI service is reachable at https://wipefix.preview.emergentagent.com/api. Backend logs show no errors. Created backend_test.py for future testing."
 ##   - task: "Broker pack API (Phase 2.1b)"
 ##     implemented: true
-##     working: "NA"
+##     working: true
 ##     file: "backend/server.py"
 ##     stuck_count: 0
 ##     priority: "high"
-##     needs_retesting: true
+##     needs_retesting: false
 ##     status_history:
 ##         -working: "NA"
 ##         -agent: "main"
@@ -133,6 +133,9 @@
 ##         -working: "NA"
 ##         -agent: "main"
 ##         -comment: "Phase 2.1 updates: broker pack fetch + caching, timestamps with 30-day reminders, export/import toasts, 404 redirect support, accessibility labels, privacy policy route, and auto-filled templates."
+##         -working: true
+##         -agent: "testing"
+##         -comment: "BROKER PACK API TESTING COMPLETED SUCCESSFULLY: Fixed NameError in server.py (BrokerPack class definition order), then verified all Phase 2.1b requirements. ✅ ALL TESTS PASSED (6/6): 1) GET /api/broker-packs/latest returns 404 when no packs exist, 2) POST /api/broker-packs with Authorization: Bearer moiF9fNxbcTS7IIDlSHEaDwbGx8dJnaXb8RcN97v9Z8 creates version 1.0.1 successfully (200), 3) GET /api/broker-packs/latest returns version 1.0.1 after creation, 4) GET /api/broker-packs/1.0.1 returns same content as latest, 5) POST same version again returns 409 conflict, 6) POST without token returns 401 unauthorized. ✅ SECURITY VERIFIED: Read endpoints work without token (public access), write endpoints require admin token. ✅ PRIVACY VERIFIED: No headers, request bodies, or tokens logged in backend logs - only HTTP status codes visible. All broker pack API endpoints working correctly with proper authentication and error handling."
 ## frontend:
 ##   - task: "Phase 1 local-first workspace + claims update"
 ##     implemented: true
