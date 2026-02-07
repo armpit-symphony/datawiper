@@ -428,7 +428,7 @@ END:VCALENDAR`;
   };
 
 
-  const generateTemplate = (broker) => {
+  const generateTemplate = (broker, channel) => {
     const fullName = `${profile.firstName} ${profile.lastName}`.trim();
     const email = profile.email.trim();
     const phone = profile.phone.trim();
@@ -451,6 +451,31 @@ END:VCALENDAR`;
       ? detailLines.join('\n')
       : 'Full name:\nEmail:\nPhone:\nAddress:';
 
+    const confirmationLine = email
+      ? `Please send confirmation to ${email}.`
+      : 'Please confirm when my request has been processed.';
+
+    if (channel === 'web_form') {
+      return `Use the details below to complete the ${broker.name} web form.
+
+${detailsBlock}
+
+Verification notes: ${broker.verification_steps || 'Follow the broker’s verification steps.'}`;
+    }
+
+    if (channel === 'fax_mail') {
+      return `To whom it may concern,
+
+I am requesting that you delete or suppress my personal information from your records and any public-facing products.
+
+${detailsBlock}
+
+${confirmationLine}
+
+Thank you,
+${fullName || 'Your name'}`;
+    }
+
     return `Subject: Data deletion request
 
 Hello ${broker.name} Privacy Team,
@@ -459,7 +484,7 @@ I am requesting that you delete or suppress my personal information from your re
 
 ${detailsBlock}
 
-Please confirm when my request has been processed.
+${confirmationLine}
 
 Thank you,
 ${fullName || 'Your name'}`;
