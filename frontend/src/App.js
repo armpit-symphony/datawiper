@@ -208,9 +208,16 @@ const DataWipeLanding = () => {
     }
 
     const fetchPack = async () => {
-      const cachedRaw = window.localStorage.getItem(PACK_CACHE_KEY);
-      const cached = cachedRaw ? JSON.parse(cachedRaw) : null;
-      const cachedVersion = cached?.version || '';
+      let cached = null;
+      let cachedVersion = '';
+
+      try {
+        const cachedRaw = window.localStorage.getItem(PACK_CACHE_KEY);
+        cached = cachedRaw ? JSON.parse(cachedRaw) : null;
+        cachedVersion = cached?.version || '';
+      } catch (error) {
+        console.error('Failed to parse broker pack cache.', error);
+      }
 
       try {
         if (backendBase) {
