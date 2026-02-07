@@ -414,6 +414,11 @@ END:VCALENDAR`;
       const next = { ...existing, updatedAt: now };
       if (value === 'submitted') {
         next.submittedAt = now;
+        next.followUpAt = addDays(now, REMINDER_DAYS);
+      }
+      if (value === 'verified') {
+        next.verifiedAt = now;
+        next.followUpAt = addDays(now, REMINDER_DAYS);
       }
       if (value === 'completed') {
         next.completedAt = now;
