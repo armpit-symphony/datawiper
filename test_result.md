@@ -154,6 +154,9 @@
 ##         -comment: "Phase 2.1c: added Admin UI route (/admin), new Admin component for publishing broker packs, and frontend .env.example with REACT_APP_ADMIN_TOKEN."
 ##         -working: "NA"
 ##         -agent: "main"
+##         -working: "NA"
+##         -agent: "main"
+##         -comment: "Phase 2.2 in progress: added template channel selector, verified status tracking, follow-up dates + reminders, and auto-filled smart templates."
 ##         -comment: "Added .gitignore to exclude .env files and prepared frontend for retesting broker pack fetch."
 ##         -working: false
 ##         -agent: "testing"
