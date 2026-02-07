@@ -521,6 +521,7 @@ ${fullName || 'Your name'}`;
     setSelectedBrokers({});
     setStatusByBroker({});
     setStatusTimestamps({});
+    setTemplateChannels({});
     setCopiedBrokerId(null);
     setLastSaved(null);
     if (typeof window !== 'undefined') {
