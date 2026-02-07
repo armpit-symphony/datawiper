@@ -504,6 +504,7 @@ ${fullName || 'Your name'}`;
       setSelectedBrokers(parsed.selectedBrokers || {});
       setStatusByBroker(parsed.statusByBroker || {});
       setStatusTimestamps(parsed.statusTimestamps || {});
+      setTemplateChannels(parsed.templateChannels || {});
       setLastSaved(parsed.updatedAt || null);
       event.target.value = '';
       showToast('Import successful. Your local plan is restored.', 'success');
