@@ -156,6 +156,9 @@
 ##         -agent: "main"
 ##         -working: "NA"
 ##         -agent: "main"
+##         -working: "NA"
+##         -agent: "main"
+##         -comment: "Phase 2.2 fixes: repaired template channel selector state, ensured templates always include profile values (no placeholders when data exists)."
 ##         -comment: "Phase 2.2 in progress: added template channel selector, verified status tracking, follow-up dates + reminders, and auto-filled smart templates."
 ##         -comment: "Added .gitignore to exclude .env files and prepared frontend for retesting broker pack fetch."
 ##         -working: false
