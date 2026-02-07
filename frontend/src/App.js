@@ -588,7 +588,7 @@ ${fullName || 'Your name'}`;
     {
       icon: <Mail className="w-8 h-8" />,
       title: 'Prefilled request templates',
-      description: 'Copy ready-to-send templates with your details and submit on the broker site.'
+      description: 'Generate tailored templates for email, web form, or fax/mail using your saved details.'
     },
     {
       icon: <UserCheck className="w-8 h-8" />,
