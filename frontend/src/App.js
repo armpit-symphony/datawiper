@@ -461,7 +461,8 @@ ${fullName || 'Your name'}`;
     showToast('Local data cleared.', 'success');
   };
 
-  const activeBrokers = BROKERS.filter((broker) => selectedBrokers[broker.id]);
+  const brokers = brokerPack?.brokers?.length ? brokerPack.brokers : BROKERS;
+  const activeBrokers = brokers.filter((broker) => selectedBrokers[broker.id]);
 
   const features = [
     {
