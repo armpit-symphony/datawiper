@@ -437,19 +437,27 @@ END:VCALENDAR`;
     const fullName = `${profile.firstName} ${profile.lastName}`.trim();
     const email = profile.email.trim();
     const phone = profile.phone.trim();
-    const addressParts = [
-      profile.address,
-      profile.city,
-      profile.stateRegion,
-      profile.postalCode,
-      profile.country
-    ].map((value) => value.trim()).filter(Boolean);
-    const addressLine = addressParts.length ? addressParts.join(', ') : '';
+    const street = profile.address.trim();
+    const city = profile.city.trim();
+    const stateRegion = profile.stateRegion.trim();
+    const postalCode = profile.postalCode.trim();
+    const country = profile.country.trim();
+    const hasFullAddress = street && city && stateRegion && postalCode && country;
+    const addressLine = hasFullAddress
+      ? `Address: ${street}, ${city}, ${stateRegion} ${postalCode}, ${country}`
+      : '';
 
-    const detailsBlock = `Full name: ${fullName || ''}
-Email: ${email || ''}
-Phone: ${phone || ''}
-Address: ${addressLine || ''}`;
+    const detailLines = [
+      `Full name: ${fullName || ''}`,
+      `Email: ${email || ''}`,
+      `Phone: ${phone || ''}`
+    ];
+
+    if (addressLine) {
+      detailLines.push(addressLine);
+    }
+
+    const detailsBlock = detailLines.join('\n');
 
     const confirmationLine = email
       ? `Please send confirmation to ${email}.`
