@@ -170,6 +170,9 @@
 ##         -working: false
 ##         -agent: "testing"
 ##         -comment: "CRITICAL DEPLOYMENT ISSUE PERSISTS: GitHub Pages HTML loads correctly (title: 'DataWipe - Local-first data broker opt-outs') but JavaScript assets are not loading. Page shows 'You need to enable JavaScript to run this app' indicating React app is not executing. ROOT CAUSE: Asset path configuration issue - JS/CSS files not being served from correct paths in /datawiper subdirectory. GitHub Actions workflow builds successfully but assets are not accessible at runtime. CANNOT COMPLETE UI TESTING until JavaScript loading is fixed. Need to verify asset paths in build output and GitHub Pages serving configuration."
+##         -working: true
+##         -agent: "testing"
+##         -comment: "FRONTEND RETEST PASSED: Broker pack version 1.0.0 displayed with fetched timestamp; 11 brokers rendered. Pack fetched from /broker-packs/latest.json (local fallback). Cache entry datawipe_broker_pack_cache present and persists after reload. Export/import toasts, status timestamps, 30-day .ics reminders, /privacy route, and direct /privacy refresh all working. No console errors."
 ##         -working: false
 ##         -agent: "testing"
 ##         -comment: "DEPLOYMENT ISSUE ROOT CAUSE IDENTIFIED AND FIXED: The homepage field in package.json was incorrect ('https://Armpit-symphony.github.io/datawipe' vs actual URL 'https://armpit-symphony.github.io/datawiper/'). Fixed homepage URL and rebuilt - now generates correct asset paths (/datawiper/static/js/...). However, changes need to be committed and pushed to GitHub for deployment. CANNOT COMPLETE UI TESTING until the corrected package.json and build files are deployed to GitHub Pages. Once deployed, the React app should load correctly and full UI testing can proceed."
