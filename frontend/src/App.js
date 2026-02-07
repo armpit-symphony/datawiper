@@ -160,6 +160,7 @@ const DataWipeLanding = () => {
   const [copiedBrokerId, setCopiedBrokerId] = React.useState(null);
 
   const baseUrl = (process.env.PUBLIC_URL || '').replace(/\/$/, '');
+  const backendBase = process.env.REACT_APP_BACKEND_URL;
 
   const normalizeBroker = (broker) => ({
     ...broker,
