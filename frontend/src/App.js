@@ -500,7 +500,7 @@ ${fullName || 'Your name'}`;
   const stats = [
     { number: '0', label: 'Accounts Required' },
     { number: '100%', label: 'Local Storage' },
-    { number: `${BROKERS.length}`, label: 'Guided Brokers' },
+    { number: `${brokers.length}`, label: 'Guided Brokers' },
     { number: 'User-led', label: 'Requests' }
   ];
 
