@@ -725,6 +725,11 @@ ${fullName || 'Your name'}`;
                 className="text-center"
               >
                 <div className="w-16 h-16 mx-auto mb-6 bg-gradient-to-r from-primary-500 to-accent-500 rounded-full flex items-center justify-center text-2xl font-bold">
+              <p className="text-xs text-secondary-500 mb-4">
+                Broker pack: {packVersion || 'local fallback'}
+                {packFetchedAt ? ` · Fetched ${formatTimestamp(packFetchedAt)}` : ''}
+              </p>
+
                   {step.step}
                 </div>
                 <h3 className="text-2xl font-semibold mb-4 text-white">
