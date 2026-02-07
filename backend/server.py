@@ -38,6 +38,73 @@ class StatusCheck(BaseModel):
 class StatusCheckCreate(BaseModel):
     client_name: str
 
+
+class BrokerEntry(BaseModel):
+    id: str
+    name: str
+    opt_out_url: str
+    form_type: str = 'web'
+    required_fields: List[str] = []
+    verification_steps: Optional[str] = ''
+    response_time: Optional[str] = ''
+    follow_up_guidance: Optional[str] = ''
+
+class BrokerPackCreate(BaseModel):
+    version: str
+    brokers: List[BrokerEntry]
+    notes: Optional[str] = None
+    updated_at: Optional[str] = None
+
+class BrokerPack(BaseModel):
+    version: str
+    created_at: str
+    updated_at: str
+    brokers: List[BrokerEntry]
+    notes: Optional[str] = None
+
+
+def verify_admin_token(authorization: Optional[str]) -> None:
+    if not ADMIN_TOKEN:
+        raise HTTPException(status_code=500, detail="Admin token not configured")
+
+    if not authorization or not authorization.startswith("Bearer "):
+        raise HTTPException(status_code=401, detail="Unauthorized")
+
+    token = authorization.split(" ", 1)[1]
+    if token != ADMIN_TOKEN:
+        raise HTTPException(status_code=401, detail="Unauthorized")
+
+
+def sanitize_pack(pack: dict) -> dict:
+    cleaned = {**pack}
+    cleaned.pop("_id", None)
+    return cleaned
+
+
+def broker_packs_collection():
+    return db.broker_packs
+
+
+def broker_pack_meta_collection():
+    return db.broker_pack_meta
+
+
+async def get_latest_version() -> Optional[str]:
+    meta = await broker_pack_meta_collection().find_one({"_id": "latest"})
+    if meta and meta.get("version"):
+        return meta["version"]
+
+    latest = (
+        await broker_packs_collection()
+        .find()
+        .sort("created_at", -1)
+        .limit(1)
+        .to_list(1)
+    )
+    if not latest:
+        return None
+    return latest[0].get("version")
+
 # Add your routes to the router instead of directly to app
 @api_router.get("/")
 async def root():
