@@ -189,7 +189,7 @@
 ##   run_ui: true
 ## test_plan:
 ##   current_focus:
-##     - "Broker pack API (Phase 2.1b)"
+##     - "Admin UI (Phase 2.1c)"
 ##     - "Phase 1 local-first workspace + claims update"
 ##   stuck_tasks:
 ##     - ""
