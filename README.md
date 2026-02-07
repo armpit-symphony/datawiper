@@ -30,8 +30,20 @@ This repo uses a GitHub Actions workflow at `.github/workflows/deploy.yml` to bu
 
 Checklist:
 1) Ensure GitHub Pages is configured to **Deploy from GitHub Actions**.
-2) `frontend/package.json` contains the `homepage` field: `https://Armpit-symphony.github.io/datawipe`.
+2) `frontend/package.json` contains the `homepage` field: `https://armpit-symphony.github.io/datawiper/`.
 3) The router uses `process.env.PUBLIC_URL` for correct base paths in production builds.
+
+## Broker pack system (Phase 2.1)
+Phase 2.1a serves broker packs as static JSON files in `frontend/public/broker-packs`.
+
+Public read endpoints (Phase 2.1b backend, metadata only):
+- `GET /api/broker-packs/latest`
+- `GET /api/broker-packs/{version}`
+
+Admin write endpoint (requires bearer token):
+- `POST /api/broker-packs` with header `Authorization: Bearer <ADMIN_TOKEN>`
+
+The admin token must be stored only in `backend/.env` and never committed.
 
 ## Privacy notes
 - Data is stored in the browser’s localStorage only.
