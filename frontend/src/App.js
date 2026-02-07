@@ -924,7 +924,7 @@ ${fullName || 'Your name'}`;
                 each broker.
               </p>
               <div className="space-y-4 max-h-[520px] overflow-y-auto pr-2">
-                {BROKERS.map((broker) => {
+                {brokers.map((broker) => {
                   const isSelected = !!selectedBrokers[broker.id];
                   const statusId = `${broker.id}-status`;
                   const timestamp = statusTimestamps[broker.id] || {};
