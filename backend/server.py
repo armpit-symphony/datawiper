@@ -110,14 +110,6 @@ async def create_broker_pack(payload: BrokerPackCreate, authorization: Optional[
     return BrokerPack(**sanitize_pack(pack_dict))
 
 
-class BrokerPack(BaseModel):
-    version: str
-    created_at: str
-    updated_at: str
-    brokers: List[BrokerEntry]
-    notes: Optional[str] = None
-
-
 def verify_admin_token(authorization: Optional[str]) -> None:
     if not ADMIN_TOKEN:
         raise HTTPException(status_code=500, detail="Admin token not configured")
